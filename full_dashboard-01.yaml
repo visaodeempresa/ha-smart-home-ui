@@ -1,25 +1,28 @@
 # ══════════════════════════════════════════════════════════════════════════════
-# SMART HOME DASHBOARD — 9 TELAS (tipo: masonry, Lovelace clássico)
-# Paleta: cream #EFE7D8 · plum #2E2742 · orange #F08648 · mint #BFDDC4
-# HACS obrigatório: button-card · card-mod · mini-graph-card
-# Cole em: Lovelace ⋮ → Editar → YAML bruto (substitua tudo)
+# SMART HOME DASHBOARD — TODAS AS 9 TELAS (tipo: masonry / Lovelace clássico)
+# ══════════════════════════════════════════════════════════════════════════════
+# COMO USAR:
+#   Lovelace > ⋮ > Editar > YAML bruto > substitua TODO o conteúdo
+#   OU: Configurações > Painéis > Adicionar painel > Lovelace YAML manual
+#
+# TIPO: masonry (layout de cartões padrão, compatível com todo o HA)
+# Para usar "Sections" (novo HA 2024+), troque type: masonry → type: sections
+#
+# DEPENDÊNCIAS (HACS): button-card · card-mod · mini-graph-card
 # ══════════════════════════════════════════════════════════════════════════════
 
 title: Smart Home
 views:
 
-# ══════════════════════════════════════════════════════════════════════════════
-# 01 · DASHBOARD
-# ══════════════════════════════════════════════════════════════════════════════
   - title: "🏠 Dashboard"
     path: dashboard
     icon: mdi:home-variant
     background: "#EFE7D8"
     cards:
 
-      # ── Cabeçalho ──────────────────────────────────────────────────────────
+      # ── Cabeçalho: saudação ─────────────────────────────────────────────────
       - type: custom:button-card
-        name: "BEM-VINDA EM CASA"
+        name: "Bem-vinda em casa"
         label: "Olá, Maycon 👋"
         show_label: true
         show_icon: false
@@ -41,13 +44,13 @@ views:
             - color: "#2E2742"
             - margin-top: "4px"
 
-      # ── Status strip ───────────────────────────────────────────────────────
+      # ── Status strip: Temperatura / Umidade / Qualidade do Ar ───────────────
       - type: horizontal-stack
         cards:
           - type: custom:button-card
             entity: sensor.sala_temperatura
-            name: "[[[ return entity ? entity.state + '°' : '—' ]]]"
-            label: "Sala"
+            name: "Sala"
+            label: "Temperatura"
             show_label: true
             icon: mdi:thermometer
             styles:
@@ -56,18 +59,9 @@ views:
                 - border-radius: "999px"
                 - padding: "8px 12px"
                 - box-shadow: "0 8px 24px rgba(46,39,66,0.08)"
-                - flex-direction: "row"
-                - align-items: "center"
-                - gap: "8px"
-              img_cell:
-                - width: "28px"
-                - height: "28px"
-                - border-radius: "50%"
-                - background: "#F1DCD4"
-                - flex-shrink: "0"
               icon:
                 - color: "#2E2742"
-                - width: "14px"
+                - width: "16px"
               name:
                 - font-size: "13px"
                 - font-weight: "700"
@@ -75,12 +69,18 @@ views:
               label:
                 - font-size: "10px"
                 - color: "#7A7388"
+            custom_fields:
+              icon_bg:
+            card_mod:
+              style: |
+                ha-card {
+                  --card-background: #F1DCD4;
+                }
 
           - type: custom:button-card
             entity: sensor.sala_umidade
-            name: "[[[ return entity ? entity.state + '%' : '—' ]]]"
-            label: "Umidade"
-            show_label: true
+            name: "Umidade"
+            show_label: false
             icon: mdi:water-percent
             styles:
               card:
@@ -88,31 +88,18 @@ views:
                 - border-radius: "999px"
                 - padding: "8px 12px"
                 - box-shadow: "0 8px 24px rgba(46,39,66,0.08)"
-                - flex-direction: "row"
-                - align-items: "center"
-                - gap: "8px"
-              img_cell:
-                - width: "28px"
-                - height: "28px"
-                - border-radius: "50%"
-                - background: "#BFDDC4"
-                - flex-shrink: "0"
               icon:
-                - color: "#2E2742"
-                - width: "14px"
+                - color: "#7FB892"
+                - width: "16px"
               name:
                 - font-size: "13px"
                 - font-weight: "700"
                 - color: "#2E2742"
-              label:
-                - font-size: "10px"
-                - color: "#7A7388"
 
           - type: custom:button-card
             entity: sensor.sala_qualidade_ar
-            name: "[[[ return entity ? entity.state : 'Boa' ]]]"
-            label: "Qual. Ar"
-            show_label: true
+            name: "Qual. Ar"
+            show_label: false
             icon: mdi:leaf
             styles:
               card:
@@ -120,27 +107,15 @@ views:
                 - border-radius: "999px"
                 - padding: "8px 12px"
                 - box-shadow: "0 8px 24px rgba(46,39,66,0.08)"
-                - flex-direction: "row"
-                - align-items: "center"
-                - gap: "8px"
-              img_cell:
-                - width: "28px"
-                - height: "28px"
-                - border-radius: "50%"
-                - background: "#D2C5E6"
-                - flex-shrink: "0"
               icon:
-                - color: "#2E2742"
-                - width: "14px"
+                - color: "#7FB892"
+                - width: "16px"
               name:
                 - font-size: "13px"
                 - font-weight: "700"
                 - color: "#2E2742"
-              label:
-                - font-size: "10px"
-                - color: "#7A7388"
 
-      # ── Hero: Cena Ativa ───────────────────────────────────────────────────
+      # ── Hero Card: Cena Ativa ────────────────────────────────────────────────
       - type: custom:button-card
         entity: scene.boa_tarde
         name: "Boa Tarde"
@@ -155,49 +130,58 @@ views:
         hold_action:
           action: navigate
           navigation_path: /lovelace/cenas
-        custom_fields:
-          badge: "CENA ATIVA"
         styles:
           card:
             - background: "#FFFFFF"
             - border-radius: "32px"
-            - padding: "20px 20px 18px 20px"
+            - padding: "20px"
             - box-shadow: "0 16px 40px rgba(46,39,66,0.10)"
             - overflow: "hidden"
             - position: "relative"
-            - text-align: "left"
-          grid:
-            - grid-template-areas: '"badge badge" "n n" "l l" "btn btn"'
-            - grid-template-columns: "1fr auto"
-            - grid-template-rows: "auto auto auto auto"
-          custom_fields:
-            badge:
-              - font-size: "11px"
-              - font-weight: "700"
-              - color: "#E36A2A"
-              - letter-spacing: "0.08em"
-              - text-transform: "uppercase"
-              - margin-bottom: "4px"
-          icon:
-            - display: "none"
           name:
             - font-size: "22px"
             - font-weight: "700"
             - letter-spacing: "-0.02em"
             - color: "#2E2742"
-            - line-height: "1.1"
+            - text-align: "left"
           label:
             - font-size: "12px"
             - color: "#7A7388"
+            - text-align: "left"
             - line-height: "1.4"
             - margin-top: "4px"
+          icon:
+            - color: "#FFFFFF"
+            - width: "28px"
+            - position: "absolute"
+            - right: "20px"
+            - top: "20px"
+        custom_fields:
+          cena_ativa:
+            card:
+              type: custom:button-card
+              name: "Cena ativa"
+              show_icon: false
+              styles:
+                card:
+                  - background: "transparent"
+                  - box-shadow: "none"
+                  - padding: "0"
+                name:
+                  - font-size: "11px"
+                  - font-weight: "700"
+                  - color: "#E36A2A"
+                  - letter-spacing: "0.08em"
+                  - text-transform: "uppercase"
         card_mod:
           style: |
             ha-card::before {
               content: '';
               position: absolute;
-              top: -10px; right: -30px;
-              width: 140px; height: 140px;
+              top: -10px;
+              right: -30px;
+              width: 140px;
+              height: 140px;
               border-radius: 50%;
               background: #F08648;
               z-index: 0;
@@ -205,15 +189,17 @@ views:
             ha-card::after {
               content: '';
               position: absolute;
-              bottom: -20px; right: 10px;
-              width: 80px; height: 80px;
+              bottom: -20px;
+              right: 10px;
+              width: 80px;
+              height: 80px;
               border-radius: 50%;
               background: #F6B584;
               opacity: 0.9;
               z-index: 0;
             }
 
-      # ── Tabs de cômodo ─────────────────────────────────────────────────────
+      # ── Tabs de Cômodo (navegação rápida) ───────────────────────────────────
       - type: horizontal-stack
         cards:
           - type: custom:button-card
@@ -227,7 +213,7 @@ views:
                 - background: "#2E2742"
                 - border-radius: "999px"
                 - padding: "8px 16px"
-                - min-height: "38px"
+                - min-height: "36px"
                 - box-shadow: "0 4px 12px rgba(46,39,66,0.25)"
               name:
                 - font-size: "12px"
@@ -236,6 +222,7 @@ views:
               icon:
                 - color: "#FFFFFF"
                 - width: "14px"
+
           - type: custom:button-card
             name: "Cozinha"
             icon: mdi:chef-hat
@@ -247,7 +234,7 @@ views:
                 - background: "#FFFFFF"
                 - border-radius: "999px"
                 - padding: "8px 16px"
-                - min-height: "38px"
+                - min-height: "36px"
                 - box-shadow: "0 4px 12px rgba(46,39,66,0.06)"
               name:
                 - font-size: "12px"
@@ -256,6 +243,7 @@ views:
               icon:
                 - color: "#7A7388"
                 - width: "14px"
+
           - type: custom:button-card
             name: "Quarto"
             icon: mdi:bed
@@ -267,7 +255,7 @@ views:
                 - background: "#FFFFFF"
                 - border-radius: "999px"
                 - padding: "8px 16px"
-                - min-height: "38px"
+                - min-height: "36px"
                 - box-shadow: "0 4px 12px rgba(46,39,66,0.06)"
               name:
                 - font-size: "12px"
@@ -276,6 +264,7 @@ views:
               icon:
                 - color: "#7A7388"
                 - width: "14px"
+
           - type: custom:button-card
             name: "Escritório"
             icon: mdi:desk
@@ -287,7 +276,7 @@ views:
                 - background: "#FFFFFF"
                 - border-radius: "999px"
                 - padding: "8px 16px"
-                - min-height: "38px"
+                - min-height: "36px"
                 - box-shadow: "0 4px 12px rgba(46,39,66,0.06)"
               name:
                 - font-size: "12px"
@@ -297,17 +286,15 @@ views:
                 - color: "#7A7388"
                 - width: "14px"
 
-      # ── Grid de dispositivos (2 colunas) ───────────────────────────────────
+      # ── Grid de Dispositivos (4 cards: 2×2) ─────────────────────────────────
       - type: grid
         columns: 2
         square: false
         cards:
-
-          # Pendente Norte
           - type: custom:button-card
             entity: light.sala_pendente_norte
             name: "Pendente Norte"
-            label: "[[[ return entity && entity.state === 'on' ? '60% · Quente' : 'Desligado' ]]]"
+            label: "Sala · 70%"
             show_label: true
             icon: mdi:ceiling-light
             tap_action:
@@ -315,69 +302,41 @@ views:
             hold_action:
               action: navigate
               navigation_path: /lovelace/luz
-            custom_fields:
-              toggle_sw: >
-                [[[
-                  const on = entity && entity.state === 'on';
-                  return `<div style="width:44px;height:26px;border-radius:13px;background:${on?'#F08648':'#C8C0D0'};position:relative;transition:background 0.2s;"><div style="position:absolute;width:20px;height:20px;background:white;border-radius:50%;top:3px;${on?'right:3px':'left:3px'};box-shadow:0 1px 4px rgba(0,0,0,0.3);transition:all 0.2s;"></div></div>`;
-                ]]]
+            state_display: "[[[ return entity.state === 'on' ? 'Ligada' : 'Desligado' ]]]"
             styles:
-              grid:
-                - grid-template-areas: '"i toggle_sw" "n n" "l l"'
-                - grid-template-columns: "min-content 1fr"
-                - grid-template-rows: "auto auto auto"
-              custom_fields:
-                toggle_sw:
-                  - justify-self: "end"
-                  - align-self: "start"
-                  - padding-top: "0"
               card:
-                - background: "[[[ return entity && entity.state === 'on' ? '#FFFFFF' : '#FBF6EC' ]]]"
+                - background: "[[[ return entity.state === 'on' ? '#FFFFFF' : '#FBF6EC' ]]]"
                 - border-radius: "26px"
                 - padding: "14px"
                 - box-shadow: "0 8px 24px rgba(46,39,66,0.08)"
                 - min-height: "120px"
               icon:
-                - color: "[[[ return entity && entity.state === 'on' ? '#2E2742' : '#7A7388' ]]]"
+                - color: "[[[ return entity.state === 'on' ? '#2E2742' : '#7A7388' ]]]"
                 - width: "18px"
                 - padding: "9px"
                 - border-radius: "50%"
-                - background: "[[[ return entity && entity.state === 'on' ? '#F6B584' : 'rgba(46,39,66,0.06)' ]]]"
+                - background: "[[[ return entity.state === 'on' ? '#F6B584' : 'rgba(46,39,66,0.06)' ]]]"
               name:
                 - font-size: "14px"
                 - font-weight: "700"
                 - color: "#2E2742"
                 - text-align: "left"
-                - margin-top: "12px"
+                - margin-top: "14px"
               label:
                 - font-size: "11px"
                 - color: "#7A7388"
                 - text-align: "left"
 
-          # Ar Condicionado
           - type: custom:button-card
             entity: climate.sala_ac
-            name: "Ar Condicionado"
-            label: "[[[ if(!entity) return '—'; const t=entity.attributes.temperature; const m=entity.attributes.hvac_mode; return (t?t+'° · ':'') + (m||''); ]]]"
+            name: "Ar-Cond. Sala"
+            label: "24° · Auto"
             show_label: true
             icon: mdi:air-conditioner
             tap_action:
               action: navigate
               navigation_path: /lovelace/clima
-            custom_fields:
-              toggle_sw: >
-                [[[
-                  const on = entity && entity.state !== 'off' && entity.state !== 'unavailable';
-                  return `<div style="width:44px;height:26px;border-radius:13px;background:${on?'#F08648':'#C8C0D0'};position:relative;transition:background 0.2s;"><div style="position:absolute;width:20px;height:20px;background:white;border-radius:50%;top:3px;${on?'right:3px':'left:3px'};box-shadow:0 1px 4px rgba(0,0,0,0.3);transition:all 0.2s;"></div></div>`;
-                ]]]
             styles:
-              grid:
-                - grid-template-areas: '"i toggle_sw" "n n" "l l"'
-                - grid-template-columns: "min-content 1fr"
-              custom_fields:
-                toggle_sw:
-                  - justify-self: "end"
-                  - align-self: "start"
               card:
                 - background: "#FFFFFF"
                 - border-radius: "26px"
@@ -385,7 +344,7 @@ views:
                 - box-shadow: "0 8px 24px rgba(46,39,66,0.08)"
                 - min-height: "120px"
               icon:
-                - color: "#9E8AC4"
+                - color: "#2E2742"
                 - width: "18px"
                 - padding: "9px"
                 - border-radius: "50%"
@@ -395,265 +354,202 @@ views:
                 - font-weight: "700"
                 - color: "#2E2742"
                 - text-align: "left"
-                - margin-top: "12px"
+                - margin-top: "14px"
               label:
                 - font-size: "11px"
                 - color: "#7A7388"
                 - text-align: "left"
 
-          # TV Sala
           - type: custom:button-card
-            entity: switch.sala_tv
+            entity: cover.sala_cortinas
+            name: "Cortinas Sala"
+            label: "[[[ return entity.attributes.current_position ? `Abertas ${entity.attributes.current_position}%` : 'Fechadas' ]]]"
+            show_label: true
+            icon: mdi:curtains
+            tap_action:
+              action: navigate
+              navigation_path: /lovelace/acessos
+            styles:
+              card:
+                - background: "#FFFFFF"
+                - border-radius: "26px"
+                - padding: "14px"
+                - box-shadow: "0 8px 24px rgba(46,39,66,0.08)"
+                - min-height: "120px"
+              icon:
+                - color: "#2E2742"
+                - width: "18px"
+                - padding: "9px"
+                - border-radius: "50%"
+                - background: "#BFDDC4"
+              name:
+                - font-size: "14px"
+                - font-weight: "700"
+                - color: "#2E2742"
+                - text-align: "left"
+                - margin-top: "14px"
+              label:
+                - font-size: "11px"
+                - color: "#7A7388"
+                - text-align: "left"
+
+          - type: custom:button-card
+            entity: switch.sala_tomada_tv
             name: "TV Sala"
-            label: "[[[ return entity && entity.state === 'on' ? 'Ligada' : 'Desligado' ]]]"
+            label: "[[[ return entity.state === 'on' ? 'Ligada' : 'Desligado' ]]]"
             show_label: true
             icon: mdi:television
             tap_action:
               action: toggle
-            custom_fields:
-              toggle_sw: >
-                [[[
-                  const on = entity && entity.state === 'on';
-                  return `<div style="width:44px;height:26px;border-radius:13px;background:${on?'#F08648':'#C8C0D0'};position:relative;transition:background 0.2s;"><div style="position:absolute;width:20px;height:20px;background:white;border-radius:50%;top:3px;${on?'right:3px':'left:3px'};box-shadow:0 1px 4px rgba(0,0,0,0.3);transition:all 0.2s;"></div></div>`;
-                ]]]
             styles:
-              grid:
-                - grid-template-areas: '"i toggle_sw" "n n" "l l"'
-                - grid-template-columns: "min-content 1fr"
-              custom_fields:
-                toggle_sw:
-                  - justify-self: "end"
-                  - align-self: "start"
               card:
-                - background: "[[[ return entity && entity.state === 'on' ? '#FFFFFF' : '#FBF6EC' ]]]"
+                - background: "[[[ return entity.state === 'on' ? '#FFFFFF' : '#FBF6EC' ]]]"
                 - border-radius: "26px"
                 - padding: "14px"
                 - box-shadow: "0 8px 24px rgba(46,39,66,0.08)"
                 - min-height: "120px"
               icon:
-                - color: "[[[ return entity && entity.state === 'on' ? '#E5B7AC' : '#7A7388' ]]]"
+                - color: "[[[ return entity.state === 'on' ? '#2E2742' : '#7A7388' ]]]"
                 - width: "18px"
                 - padding: "9px"
                 - border-radius: "50%"
-                - background: "[[[ return entity && entity.state === 'on' ? '#F1DCD4' : 'rgba(46,39,66,0.06)' ]]]"
+                - background: "[[[ return entity.state === 'on' ? '#F1DCD4' : 'rgba(46,39,66,0.06)' ]]]"
               name:
                 - font-size: "14px"
                 - font-weight: "700"
                 - color: "#2E2742"
                 - text-align: "left"
-                - margin-top: "12px"
+                - margin-top: "14px"
               label:
                 - font-size: "11px"
                 - color: "#7A7388"
                 - text-align: "left"
 
-          # Câmera
-          - type: custom:button-card
-            entity: switch.sala_camera
-            name: "Câmera"
-            label: "[[[ return entity && entity.state === 'on' ? 'Gravando' : 'Desligado' ]]]"
-            show_label: true
-            icon: mdi:cctv
-            tap_action:
-              action: toggle
-            custom_fields:
-              toggle_sw: >
-                [[[
-                  const on = entity && entity.state === 'on';
-                  return `<div style="width:44px;height:26px;border-radius:13px;background:${on?'#F08648':'#C8C0D0'};position:relative;transition:background 0.2s;"><div style="position:absolute;width:20px;height:20px;background:white;border-radius:50%;top:3px;${on?'right:3px':'left:3px'};box-shadow:0 1px 4px rgba(0,0,0,0.3);transition:all 0.2s;"></div></div>`;
-                ]]]
-            styles:
-              grid:
-                - grid-template-areas: '"i toggle_sw" "n n" "l l"'
-                - grid-template-columns: "min-content 1fr"
-              custom_fields:
-                toggle_sw:
-                  - justify-self: "end"
-                  - align-self: "start"
-              card:
-                - background: "[[[ return entity && entity.state === 'on' ? '#FFFFFF' : '#FBF6EC' ]]]"
-                - border-radius: "26px"
-                - padding: "14px"
-                - box-shadow: "0 8px 24px rgba(46,39,66,0.08)"
-                - min-height: "120px"
-              icon:
-                - color: "[[[ return entity && entity.state === 'on' ? '#7FB892' : '#7A7388' ]]]"
-                - width: "18px"
-                - padding: "9px"
-                - border-radius: "50%"
-                - background: "[[[ return entity && entity.state === 'on' ? '#BFDDC4' : 'rgba(46,39,66,0.06)' ]]]"
-              name:
-                - font-size: "14px"
-                - font-weight: "700"
-                - color: "#2E2742"
-                - text-align: "left"
-                - margin-top: "12px"
-              label:
-                - font-size: "11px"
-                - color: "#7A7388"
-                - text-align: "left"
-
-          # Fechadura
-          - type: custom:button-card
-            entity: lock.porta_entrada
-            name: "Fechadura"
-            label: "[[[ return entity && entity.state === 'locked' ? 'Trancada' : 'Destrancada' ]]]"
-            show_label: true
-            icon: "[[[ return entity && entity.state === 'locked' ? 'mdi:lock' : 'mdi:lock-open' ]]]"
-            tap_action:
-              action: more-info
-            custom_fields:
-              toggle_sw: >
-                [[[
-                  const on = entity && entity.state === 'locked';
-                  return `<div style="width:44px;height:26px;border-radius:13px;background:${on?'#F08648':'#C8C0D0'};position:relative;transition:background 0.2s;"><div style="position:absolute;width:20px;height:20px;background:white;border-radius:50%;top:3px;${on?'right:3px':'left:3px'};box-shadow:0 1px 4px rgba(0,0,0,0.3);transition:all 0.2s;"></div></div>`;
-                ]]]
-            styles:
-              grid:
-                - grid-template-areas: '"i toggle_sw" "n n" "l l"'
-                - grid-template-columns: "min-content 1fr"
-              custom_fields:
-                toggle_sw:
-                  - justify-self: "end"
-                  - align-self: "start"
-              card:
-                - background: "#FFFFFF"
-                - border-radius: "26px"
-                - padding: "14px"
-                - box-shadow: "0 8px 24px rgba(46,39,66,0.08)"
-                - min-height: "120px"
-              icon:
-                - color: "#9E8AC4"
-                - width: "18px"
-                - padding: "9px"
-                - border-radius: "50%"
-                - background: "#D2C5E6"
-              name:
-                - font-size: "14px"
-                - font-weight: "700"
-                - color: "#2E2742"
-                - text-align: "left"
-                - margin-top: "12px"
-              label:
-                - font-size: "11px"
-                - color: "#7A7388"
-                - text-align: "left"
-
-          # Tomada Mesa
-          - type: custom:button-card
-            entity: switch.sala_tomada_mesa
-            name: "Tomada Mesa"
-            label: "[[[ return entity && entity.state === 'on' ? 'Ligada' : 'Desligado' ]]]"
-            show_label: true
-            icon: mdi:power-plug
-            tap_action:
-              action: toggle
-            custom_fields:
-              toggle_sw: >
-                [[[
-                  const on = entity && entity.state === 'on';
-                  return `<div style="width:44px;height:26px;border-radius:13px;background:${on?'#F08648':'#C8C0D0'};position:relative;transition:background 0.2s;"><div style="position:absolute;width:20px;height:20px;background:white;border-radius:50%;top:3px;${on?'right:3px':'left:3px'};box-shadow:0 1px 4px rgba(0,0,0,0.3);transition:all 0.2s;"></div></div>`;
-                ]]]
-            styles:
-              grid:
-                - grid-template-areas: '"i toggle_sw" "n n" "l l"'
-                - grid-template-columns: "min-content 1fr"
-              custom_fields:
-                toggle_sw:
-                  - justify-self: "end"
-                  - align-self: "start"
-              card:
-                - background: "[[[ return entity && entity.state === 'on' ? '#FFFFFF' : '#FBF6EC' ]]]"
-                - border-radius: "26px"
-                - padding: "14px"
-                - box-shadow: "0 8px 24px rgba(46,39,66,0.08)"
-                - min-height: "120px"
-              icon:
-                - color: "[[[ return entity && entity.state === 'on' ? '#F08648' : '#7A7388' ]]]"
-                - width: "18px"
-                - padding: "9px"
-                - border-radius: "50%"
-                - background: "[[[ return entity && entity.state === 'on' ? '#F6B584' : 'rgba(46,39,66,0.06)' ]]]"
-              name:
-                - font-size: "14px"
-                - font-weight: "700"
-                - color: "#2E2742"
-                - text-align: "left"
-                - margin-top: "12px"
-              label:
-                - font-size: "11px"
-                - color: "#7A7388"
-                - text-align: "left"
-
-      # ── Card de Música (plum escuro) ────────────────────────────────────────
-      - type: custom:button-card
+      # ── Card de Música (escuro) ──────────────────────────────────────────────
+      - type: media-control
         entity: media_player.sala
-        name: "[[[ if(!entity || !entity.attributes.media_title) return 'Sunset Drive · Lofi'; return (entity.attributes.media_title||'') + (entity.attributes.media_artist ? ' · '+entity.attributes.media_artist : ''); ]]]"
-        label: "TOCANDO · SALA"
-        show_label: true
-        icon: mdi:speaker
-        tap_action:
-          action: call-service
-          service: media_player.media_play_pause
-          target:
-            entity_id: media_player.sala
-        hold_action:
-          action: more-info
-        styles:
-          card:
-            - background: "#2E2742"
-            - border-radius: "26px"
-            - padding: "16px"
-            - box-shadow: "0 18px 40px rgba(20,15,35,0.35)"
-            - flex-direction: "row"
-            - align-items: "center"
-            - gap: "12px"
-          img_cell:
-            - width: "52px"
-            - height: "52px"
-            - border-radius: "14px"
-            - background: "linear-gradient(135deg, #F08648, #F6B584)"
-            - flex-shrink: "0"
-          icon:
-            - color: "#FFFFFF"
-            - width: "24px"
-          name:
-            - font-size: "14px"
-            - font-weight: "700"
-            - color: "#FFFFFF"
-            - text-align: "left"
-            - white-space: "nowrap"
-            - overflow: "hidden"
-            - text-overflow: "ellipsis"
-          label:
-            - font-size: "10px"
-            - color: "rgba(255,255,255,0.55)"
-            - font-weight: "600"
-            - letter-spacing: "0.08em"
-            - text-transform: "uppercase"
-            - text-align: "left"
+        card_mod:
+          style: |
+            ha-card {
+              background: #2E2742 !important;
+              border-radius: 26px !important;
+              box-shadow: 0 18px 40px rgba(20,15,35,0.35) !important;
+              color: #fff !important;
+            }
+            ha-card * {
+              color: #fff !important;
+            }
 
-# ══════════════════════════════════════════════════════════════════════════════
-# 02 · LUZ
-# ══════════════════════════════════════════════════════════════════════════════
+      # ── Nav Inferior ────────────────────────────────────────────────────────
+      - type: horizontal-stack
+        cards:
+          - type: custom:button-card
+            icon: mdi:home-variant
+            name: ""
+            tap_action:
+              action: navigate
+              navigation_path: /lovelace/dashboard
+            styles:
+              card:
+                - background: "transparent"
+                - box-shadow: "none"
+                - min-height: "48px"
+              icon:
+                - color: "#F08648"
+                - width: "24px"
+
+          - type: custom:button-card
+            icon: mdi:view-grid
+            name: ""
+            tap_action:
+              action: navigate
+              navigation_path: /lovelace/dispositivos
+            styles:
+              card:
+                - background: "transparent"
+                - box-shadow: "none"
+                - min-height: "48px"
+              icon:
+                - color: "#7A7388"
+                - width: "24px"
+
+          - type: custom:button-card
+            icon: mdi:refresh-auto
+            name: ""
+            tap_action:
+              action: navigate
+              navigation_path: /lovelace/cenas
+            styles:
+              card:
+                - background: "transparent"
+                - box-shadow: "none"
+                - min-height: "48px"
+              icon:
+                - color: "#7A7388"
+                - width: "24px"
+
+          - type: custom:button-card
+            icon: mdi:lightning-bolt
+            name: ""
+            tap_action:
+              action: navigate
+              navigation_path: /lovelace/energia
+            styles:
+              card:
+                - background: "transparent"
+                - box-shadow: "none"
+                - min-height: "48px"
+              icon:
+                - color: "#7A7388"
+                - width: "24px"
+
+          - type: custom:button-card
+            icon: mdi:cog
+            name: ""
+            tap_action:
+              action: navigate
+              navigation_path: /lovelace/config
+            styles:
+              card:
+                - background: "transparent"
+                - box-shadow: "none"
+                - min-height: "48px"
+              icon:
+                - color: "#7A7388"
+                - width: "24px"
+
   - title: "💡 Luz"
     path: luz
     icon: mdi:lightbulb-outline
     background: "#EFE7D8"
     cards:
 
+      # ── Cabeçalho com nome da luminária ────────────────────────────────────
       - type: custom:button-card
+        entity: light.sala_pendente_norte
         name: "Pendente Norte"
-        label: "SALA · LUMINÁRIA"
+        label: "Sala · Luminária"
         show_label: true
-        show_icon: false
+        icon: mdi:arrow-left
+        tap_action:
+          action: navigate
+          navigation_path: /lovelace/dashboard
         styles:
           card:
             - background: "transparent"
             - box-shadow: "none"
-            - padding: "20px 16px 8px"
+            - padding: "16px 16px 8px"
+            - flex-direction: "row"
+            - justify-content: "space-between"
+          icon:
+            - color: "#2E2742"
+            - width: "20px"
+            - background: "#FFFFFF"
+            - padding: "10px"
+            - border-radius: "50%"
+            - box-shadow: "0 4px 12px rgba(46,39,66,0.08)"
           name:
-            - font-size: "18px"
+            - font-size: "16px"
             - font-weight: "700"
             - color: "#2E2742"
           label:
@@ -663,31 +559,74 @@ views:
             - text-transform: "uppercase"
             - letter-spacing: "0.06em"
 
+      # ── Controle de Brilho (slider nativo HA) ──────────────────────────────
       - type: light
         entity: light.sala_pendente_norte
         card_mod:
           style: |
             ha-card {
-              background: #FFFFFF !important;
-              border-radius: 32px !important;
-              box-shadow: 0 16px 40px rgba(46,39,66,0.10) !important;
+              background: #FFFFFF;
+              border-radius: 32px;
+              box-shadow: 0 16px 40px rgba(46,39,66,0.10);
               padding: 20px;
             }
 
+      # ── Temperatura de Cor ─────────────────────────────────────────────────
+      - type: custom:button-card
+        entity: light.sala_pendente_norte
+        name: "Temperatura de Cor"
+        label: "[[[ if (!entity.attributes.color_temp_kelvin) return '—'; return entity.attributes.color_temp_kelvin + ' K'; ]]]"
+        show_label: true
+        show_icon: false
+        tap_action:
+          action: more-info
+        styles:
+          card:
+            - background: "#FFFFFF"
+            - border-radius: "26px"
+            - padding: "16px"
+            - box-shadow: "0 8px 24px rgba(46,39,66,0.08)"
+          name:
+            - font-size: "11px"
+            - font-weight: "700"
+            - color: "#7A7388"
+            - text-transform: "uppercase"
+            - letter-spacing: "0.06em"
+            - text-align: "left"
+          label:
+            - font-size: "18px"
+            - font-weight: "700"
+            - color: "#2E2742"
+            - text-align: "left"
+        card_mod:
+          style: |
+            ha-card::after {
+              content: '';
+              display: block;
+              height: 14px;
+              border-radius: 999px;
+              background: linear-gradient(90deg, #FFB870 0%, #FFE7C2 50%, #E4F0FF 100%);
+              margin-top: 12px;
+            }
+
+      # ── Informação de Uso (em linha) ────────────────────────────────────────
       - type: horizontal-stack
         cards:
           - type: custom:button-card
             entity: sensor.sala_pendente_energia_hoje
-            name: "[[[ return entity ? entity.state + ' h' : '3h 42min' ]]]"
-            label: "USO HOJE"
+            name: "Uso hoje"
+            label: "kWh consumidos"
             show_label: true
-            show_icon: false
+            icon: mdi:clock-outline
             styles:
               card:
                 - background: "#2E2742"
                 - border-radius: "20px"
                 - padding: "14px"
                 - box-shadow: "0 8px 24px rgba(46,39,66,0.2)"
+              icon:
+                - color: "rgba(255,255,255,0.5)"
+                - width: "14px"
               name:
                 - font-size: "20px"
                 - font-weight: "700"
@@ -696,15 +635,13 @@ views:
                 - font-size: "11px"
                 - color: "#F08648"
                 - font-weight: "600"
-                - text-transform: "uppercase"
-                - letter-spacing: "0.06em"
 
           - type: custom:button-card
             entity: light.sala_pendente_norte
-            name: "[[[ return entity && entity.state === 'on' ? 'Ligada' : 'Desligada' ]]]"
-            label: "ENERGIA"
+            name: "[[[ return entity.state === 'on' ? 'Ligada' : 'Desligada' ]]]"
+            label: "Energia"
             show_label: true
-            icon: "[[[ return entity && entity.state === 'on' ? 'mdi:power' : 'mdi:power-off' ]]]"
+            icon: "[[[ return entity.state === 'on' ? 'mdi:power' : 'mdi:power-off' ]]]"
             tap_action:
               action: toggle
             styles:
@@ -714,7 +651,7 @@ views:
                 - padding: "14px"
                 - box-shadow: "0 8px 24px rgba(46,39,66,0.08)"
               icon:
-                - color: "[[[ return entity && entity.state === 'on' ? '#F08648' : '#7A7388' ]]]"
+                - color: "[[[ return entity.state === 'on' ? '#F08648' : '#7A7388' ]]]"
                 - width: "20px"
               name:
                 - font-size: "18px"
@@ -726,6 +663,23 @@ views:
                 - text-transform: "uppercase"
                 - letter-spacing: "0.06em"
                 - font-weight: "600"
+
+      # ── Presets ────────────────────────────────────────────────────────────
+      - type: custom:button-card
+        name: "PRESETS"
+        show_icon: false
+        styles:
+          card:
+            - background: "transparent"
+            - box-shadow: "none"
+            - padding: "8px 4px 0"
+          name:
+            - font-size: "11px"
+            - font-weight: "700"
+            - color: "#7A7388"
+            - letter-spacing: "0.06em"
+            - text-transform: "uppercase"
+            - text-align: "left"
 
       - type: horizontal-stack
         cards:
@@ -741,8 +695,9 @@ views:
               card:
                 - background: "#FFFFFF"
                 - border-radius: "20px"
-                - padding: "12px 8px"
+                - padding: "12px 10px"
                 - box-shadow: "0 4px 12px rgba(46,39,66,0.06)"
+                - min-height: "70px"
               icon:
                 - color: "#E36A2A"
                 - width: "18px"
@@ -754,6 +709,7 @@ views:
                 - font-weight: "700"
                 - color: "#2E2742"
                 - margin-top: "8px"
+
           - type: custom:button-card
             name: "Cinema"
             icon: mdi:movie-outline
@@ -766,8 +722,9 @@ views:
               card:
                 - background: "#FFFFFF"
                 - border-radius: "20px"
-                - padding: "12px 8px"
+                - padding: "12px 10px"
                 - box-shadow: "0 4px 12px rgba(46,39,66,0.06)"
+                - min-height: "70px"
               icon:
                 - color: "#9E8AC4"
                 - width: "18px"
@@ -779,6 +736,7 @@ views:
                 - font-weight: "700"
                 - color: "#2E2742"
                 - margin-top: "8px"
+
           - type: custom:button-card
             name: "Foco"
             icon: mdi:head-flash-outline
@@ -791,8 +749,9 @@ views:
               card:
                 - background: "#FFFFFF"
                 - border-radius: "20px"
-                - padding: "12px 8px"
+                - padding: "12px 10px"
                 - box-shadow: "0 4px 12px rgba(46,39,66,0.06)"
+                - min-height: "70px"
               icon:
                 - color: "#7FB892"
                 - width: "18px"
@@ -804,6 +763,7 @@ views:
                 - font-weight: "700"
                 - color: "#2E2742"
                 - margin-top: "8px"
+
           - type: custom:button-card
             name: "Jantar"
             icon: mdi:candle
@@ -816,8 +776,9 @@ views:
               card:
                 - background: "#FFFFFF"
                 - border-radius: "20px"
-                - padding: "12px 8px"
+                - padding: "12px 10px"
                 - box-shadow: "0 4px 12px rgba(46,39,66,0.06)"
+                - min-height: "70px"
               icon:
                 - color: "#E5B7AC"
                 - width: "18px"
@@ -830,62 +791,50 @@ views:
                 - color: "#2E2742"
                 - margin-top: "8px"
 
+      # ── Fita LED (entidade separada) ───────────────────────────────────────
       - type: custom:button-card
         entity: light.sala_fita_led
         name: "Fita LED — Sala"
-        label: "[[[ return entity && entity.state === 'on' ? 'Ligada · ' + (entity.attributes.brightness ? Math.round(entity.attributes.brightness/2.55)+'%' : '') : 'Desligada' ]]]"
+        label: "[[[ return entity.state === 'on' ? `Ligada · ${entity.attributes.brightness ? Math.round(entity.attributes.brightness/2.55) + '%' : ''}` : 'Desligada' ]]]"
         show_label: true
         icon: mdi:led-strip-variant
         tap_action:
           action: toggle
-        custom_fields:
-          toggle_sw: >
-            [[[
-              const on = entity && entity.state === 'on';
-              return `<div style="width:44px;height:26px;border-radius:13px;background:${on?'#F08648':'#C8C0D0'};position:relative;"><div style="position:absolute;width:20px;height:20px;background:white;border-radius:50%;top:3px;${on?'right:3px':'left:3px'};box-shadow:0 1px 4px rgba(0,0,0,0.3);"></div></div>`;
-            ]]]
+        hold_action:
+          action: more-info
         styles:
-          grid:
-            - grid-template-areas: '"i toggle_sw" "n n" "l l"'
-            - grid-template-columns: "min-content 1fr"
-          custom_fields:
-            toggle_sw:
-              - justify-self: "end"
-              - align-self: "start"
           card:
-            - background: "[[[ return entity && entity.state === 'on' ? '#FFFFFF' : '#FBF6EC' ]]]"
+            - background: "[[[ return entity.state === 'on' ? '#FFFFFF' : '#FBF6EC' ]]]"
             - border-radius: "26px"
-            - padding: "14px"
+            - padding: "16px"
             - box-shadow: "0 8px 24px rgba(46,39,66,0.08)"
           icon:
-            - color: "[[[ return entity && entity.state === 'on' ? '#F08648' : '#7A7388' ]]]"
+            - color: "[[[ return entity.state === 'on' ? '#F08648' : '#7A7388' ]]]"
             - width: "22px"
             - padding: "9px"
             - border-radius: "50%"
-            - background: "[[[ return entity && entity.state === 'on' ? '#F6B584' : 'rgba(46,39,66,0.06)' ]]]"
+            - background: "[[[ return entity.state === 'on' ? '#F6B584' : 'rgba(46,39,66,0.06)' ]]]"
           name:
             - font-size: "14px"
             - font-weight: "700"
             - color: "#2E2742"
             - text-align: "left"
-            - margin-top: "12px"
+            - margin-top: "4px"
           label:
             - font-size: "11px"
             - color: "#7A7388"
             - text-align: "left"
 
-# ══════════════════════════════════════════════════════════════════════════════
-# 03 · CLIMA
-# ══════════════════════════════════════════════════════════════════════════════
   - title: "❄️ Clima"
     path: clima
     icon: mdi:thermometer
     background: "#2E2742"
     cards:
 
+      # ── Cabeçalho ───────────────────────────────────────────────────────────
       - type: custom:button-card
         name: "Climatização"
-        label: "SALA"
+        label: "Sala"
         show_label: true
         show_icon: false
         styles:
@@ -904,11 +853,12 @@ views:
             - text-transform: "uppercase"
             - letter-spacing: "0.06em"
 
+      # ── Status: Temp Atual + Temp Externa ──────────────────────────────────
       - type: horizontal-stack
         cards:
           - type: custom:button-card
             entity: sensor.sala_temperatura
-            name: "[[[ return entity ? entity.state + '°' : '24°' ]]]"
+            name: "[[[ return entity.state + '°' ]]]"
             label: "Temperatura Atual"
             show_label: true
             show_icon: false
@@ -928,9 +878,10 @@ views:
                 - text-transform: "uppercase"
                 - letter-spacing: "0.06em"
                 - font-weight: "600"
+
           - type: custom:button-card
             entity: sensor.temperatura_externa
-            name: "[[[ return entity ? entity.state + '°' : '31°' ]]]"
+            name: "[[[ return entity.state + '°' ]]]"
             label: "Temperatura Externa"
             show_label: true
             icon: mdi:weather-sunny
@@ -954,6 +905,7 @@ views:
                 - letter-spacing: "0.06em"
                 - font-weight: "600"
 
+      # ── Termostato ─────────────────────────────────────────────────────────
       - type: thermostat
         entity: climate.sala_ac
         card_mod:
@@ -964,7 +916,21 @@ views:
               box-shadow: none !important;
               backdrop-filter: blur(20px);
             }
+            ha-card * {
+              --thermostat-ha-card-background: transparent;
+            }
+            round-slider {
+              --round-slider-path-color: rgba(255,255,255,0.15);
+              --round-slider-bar-color: #F08648;
+            }
+            .current-temperature {
+              color: #FFFFFF !important;
+            }
+            .current-temperature-text {
+              color: rgba(255,255,255,0.6) !important;
+            }
 
+      # ── Pills de Modo ──────────────────────────────────────────────────────
       - type: horizontal-stack
         cards:
           - type: custom:button-card
@@ -980,7 +946,7 @@ views:
             state_display: " "
             styles:
               card:
-                - background: "[[[ return entity && entity.attributes.hvac_mode === 'cool' ? '#F08648' : 'rgba(255,255,255,0.08)' ]]]"
+                - background: "[[[ return entity.attributes.hvac_mode === 'cool' ? '#F08648' : 'rgba(255,255,255,0.08)' ]]]"
                 - border-radius: "20px"
                 - padding: "10px 4px"
                 - box-shadow: "none"
@@ -992,6 +958,7 @@ views:
                 - font-size: "10px"
                 - font-weight: "600"
                 - color: "#FFFFFF"
+
           - type: custom:button-card
             entity: climate.sala_ac
             name: "Quente"
@@ -1005,7 +972,7 @@ views:
             state_display: " "
             styles:
               card:
-                - background: "[[[ return entity && entity.attributes.hvac_mode === 'heat' ? '#F08648' : 'rgba(255,255,255,0.08)' ]]]"
+                - background: "[[[ return entity.attributes.hvac_mode === 'heat' ? '#F08648' : 'rgba(255,255,255,0.08)' ]]]"
                 - border-radius: "20px"
                 - padding: "10px 4px"
                 - box-shadow: "none"
@@ -1017,6 +984,7 @@ views:
                 - font-size: "10px"
                 - font-weight: "600"
                 - color: "#FFFFFF"
+
           - type: custom:button-card
             entity: climate.sala_ac
             name: "Auto"
@@ -1030,7 +998,7 @@ views:
             state_display: " "
             styles:
               card:
-                - background: "[[[ return entity && entity.attributes.hvac_mode === 'heat_cool' ? '#F08648' : 'rgba(255,255,255,0.08)' ]]]"
+                - background: "[[[ return entity.attributes.hvac_mode === 'heat_cool' ? '#F08648' : 'rgba(255,255,255,0.08)' ]]]"
                 - border-radius: "20px"
                 - padding: "10px 4px"
                 - box-shadow: "none"
@@ -1042,6 +1010,7 @@ views:
                 - font-size: "10px"
                 - font-weight: "600"
                 - color: "#FFFFFF"
+
           - type: custom:button-card
             entity: climate.sala_ac
             name: "Vent."
@@ -1055,7 +1024,7 @@ views:
             state_display: " "
             styles:
               card:
-                - background: "[[[ return entity && entity.attributes.hvac_mode === 'fan_only' ? '#F08648' : 'rgba(255,255,255,0.08)' ]]]"
+                - background: "[[[ return entity.attributes.hvac_mode === 'fan_only' ? '#F08648' : 'rgba(255,255,255,0.08)' ]]]"
                 - border-radius: "20px"
                 - padding: "10px 4px"
                 - box-shadow: "none"
@@ -1067,6 +1036,7 @@ views:
                 - font-size: "10px"
                 - font-weight: "600"
                 - color: "#FFFFFF"
+
           - type: custom:button-card
             entity: climate.sala_ac
             name: "Off"
@@ -1080,7 +1050,7 @@ views:
             state_display: " "
             styles:
               card:
-                - background: "[[[ return entity && entity.attributes.hvac_mode === 'off' ? '#F08648' : 'rgba(255,255,255,0.08)' ]]]"
+                - background: "[[[ return entity.attributes.hvac_mode === 'off' ? '#F08648' : 'rgba(255,255,255,0.08)' ]]]"
                 - border-radius: "20px"
                 - padding: "10px 4px"
                 - box-shadow: "none"
@@ -1093,19 +1063,57 @@ views:
                 - font-weight: "600"
                 - color: "#FFFFFF"
 
+      # ── Velocidade do Ventilador ───────────────────────────────────────────
+      - type: custom:button-card
+        entity: climate.sala_ac
+        name: "Velocidade do Ventilador"
+        label: "[[[ const fm = entity.attributes.fan_mode; return fm ? fm.charAt(0).toUpperCase() + fm.slice(1) : '—' ]]]"
+        show_label: true
+        icon: mdi:fan
+        tap_action:
+          action: more-info
+        styles:
+          card:
+            - background: "rgba(255,255,255,0.06)"
+            - border-radius: "26px"
+            - padding: "16px"
+            - box-shadow: "none"
+            - backdrop-filter: "blur(20px)"
+          icon:
+            - color: "#BFDDC4"
+            - width: "20px"
+          name:
+            - font-size: "13px"
+            - font-weight: "700"
+            - color: "#FFFFFF"
+            - text-align: "left"
+            - margin-top: "4px"
+          label:
+            - font-size: "20px"
+            - font-weight: "700"
+            - color: "#BFDDC4"
+            - text-align: "right"
+
+      # ── Gráfico de histórico de temperatura ────────────────────────────────
       - type: custom:mini-graph-card
         entity: sensor.sala_temperatura
         name: "Temperatura 24h"
         hours_to_show: 24
-        points_per_hour: 4
+        points_per_hour: 2
         line_color: "#F08648"
         line_width: 2
         fill: fade
         show:
-          state: true
-          extrema: true
-          labels: true
           icon: false
+          state: true
+          labels: true
+        color_thresholds:
+          - value: 18
+            color: "#D2C5E6"
+          - value: 22
+            color: "#BFDDC4"
+          - value: 26
+            color: "#F08648"
         card_mod:
           style: |
             ha-card {
@@ -1114,18 +1122,85 @@ views:
               box-shadow: none !important;
             }
 
-# ══════════════════════════════════════════════════════════════════════════════
-# 04 · CENAS
-# ══════════════════════════════════════════════════════════════════════════════
+      # ── Climatizador / Umidificador (extras) ──────────────────────────────
+      - type: grid
+        columns: 2
+        square: false
+        cards:
+          - type: custom:button-card
+            entity: switch.sala_umidificador
+            name: "Umidificador"
+            label: "[[[ return entity.state === 'on' ? 'Ligado · Nebulizando' : 'Desligado' ]]]"
+            show_label: true
+            icon: mdi:air-humidifier
+            tap_action:
+              action: toggle
+            styles:
+              card:
+                - background: "[[[ return entity.state === 'on' ? 'rgba(255,255,255,0.12)' : 'rgba(255,255,255,0.06)' ]]]"
+                - border-radius: "20px"
+                - padding: "14px"
+                - box-shadow: "none"
+                - min-height: "100px"
+              icon:
+                - color: "[[[ return entity.state === 'on' ? '#BFDDC4' : 'rgba(255,255,255,0.4)' ]]]"
+                - width: "18px"
+                - padding: "9px"
+                - border-radius: "50%"
+                - background: "rgba(255,255,255,0.08)"
+              name:
+                - font-size: "13px"
+                - font-weight: "700"
+                - color: "#FFFFFF"
+                - text-align: "left"
+                - margin-top: "14px"
+              label:
+                - font-size: "11px"
+                - color: "rgba(255,255,255,0.55)"
+                - text-align: "left"
+
+          - type: custom:button-card
+            entity: switch.sala_purificador_ar
+            name: "Purificador de Ar"
+            label: "[[[ return entity.state === 'on' ? 'Ligado · Qualidade Boa' : 'Desligado' ]]]"
+            show_label: true
+            icon: mdi:air-purifier
+            tap_action:
+              action: toggle
+            styles:
+              card:
+                - background: "[[[ return entity.state === 'on' ? 'rgba(255,255,255,0.12)' : 'rgba(255,255,255,0.06)' ]]]"
+                - border-radius: "20px"
+                - padding: "14px"
+                - box-shadow: "none"
+                - min-height: "100px"
+              icon:
+                - color: "[[[ return entity.state === 'on' ? '#D2C5E6' : 'rgba(255,255,255,0.4)' ]]]"
+                - width: "18px"
+                - padding: "9px"
+                - border-radius: "50%"
+                - background: "rgba(255,255,255,0.08)"
+              name:
+                - font-size: "13px"
+                - font-weight: "700"
+                - color: "#FFFFFF"
+                - text-align: "left"
+                - margin-top: "14px"
+              label:
+                - font-size: "11px"
+                - color: "rgba(255,255,255,0.55)"
+                - text-align: "left"
+
   - title: "🎬 Cenas"
     path: cenas
     icon: mdi:movie-play-outline
     background: "#EFE7D8"
     cards:
 
+      # ── Cabeçalho ───────────────────────────────────────────────────────────
       - type: custom:button-card
         name: "Cenas"
-        label: "SUA CASA"
+        label: "Sua casa"
         show_label: true
         show_icon: false
         styles:
@@ -1147,6 +1222,7 @@ views:
             - letter-spacing: "0.06em"
             - text-align: "left"
 
+      # ── Card Hero: Cinema em Família ────────────────────────────────────────
       - type: custom:button-card
         entity: scene.cinema_em_familia
         name: "Cinema em Família"
@@ -1158,8 +1234,6 @@ views:
           service: scene.turn_on
           target:
             entity_id: scene.cinema_em_familia
-        custom_fields:
-          badge: "SUGERIDA"
         styles:
           card:
             - background: "#2E2742"
@@ -1169,52 +1243,74 @@ views:
             - overflow: "hidden"
             - position: "relative"
             - min-height: "160px"
-            - text-align: "left"
-          grid:
-            - grid-template-areas: '"badge badge" "n n" "l l"'
-          custom_fields:
-            badge:
-              - font-size: "10px"
-              - font-weight: "700"
-              - color: "rgba(255,255,255,0.8)"
-              - letter-spacing: "0.08em"
-              - text-transform: "uppercase"
-              - background: "rgba(255,255,255,0.15)"
-              - padding: "4px 10px"
-              - border-radius: "999px"
-              - display: "inline-block"
-              - margin-bottom: "10px"
           icon:
+            - color: "#FFFFFF"
+            - width: "24px"
             - display: "none"
           name:
             - font-size: "24px"
             - font-weight: "700"
             - letter-spacing: "-0.02em"
             - color: "#FFFFFF"
+            - text-align: "left"
             - line-height: "1.1"
           label:
             - font-size: "12px"
             - color: "rgba(255,255,255,0.65)"
+            - text-align: "left"
             - line-height: "1.4"
             - margin-top: "6px"
+            - max-width: "200px"
         card_mod:
           style: |
+            ha-card::before {
+              content: 'Sugerida';
+              position: absolute;
+              top: 22px;
+              right: 22px;
+              background: rgba(255,255,255,0.15);
+              color: #fff;
+              font-size: 10px;
+              font-weight: 700;
+              letter-spacing: 0.08em;
+              text-transform: uppercase;
+              padding: 4px 10px;
+              border-radius: 999px;
+            }
             ha-card::after {
               content: '';
               position: absolute;
-              top: -30px; right: -40px;
-              width: 180px; height: 180px;
+              top: -30px;
+              right: -40px;
+              width: 180px;
+              height: 180px;
               border-radius: 50%;
               background: #F08648;
               opacity: 0.95;
               z-index: 0;
-              pointer-events: none;
             }
 
+      # ── Título seção ────────────────────────────────────────────────────────
+      - type: custom:button-card
+        name: "Suas cenas"
+        show_icon: false
+        styles:
+          card:
+            - background: "transparent"
+            - box-shadow: "none"
+            - padding: "16px 4px 4px"
+          name:
+            - font-size: "14px"
+            - font-weight: "700"
+            - color: "#2E2742"
+            - text-align: "left"
+
+      # ── Grid de Cenas (2×3) ─────────────────────────────────────────────────
       - type: grid
         columns: 2
         square: false
         cards:
+          # Cena: Bom Dia
           - type: custom:button-card
             entity: scene.bom_dia
             name: "Bom Dia"
@@ -1231,8 +1327,10 @@ views:
                 - background: "#F6B584"
                 - border-radius: "26px"
                 - padding: "14px"
+                - box-shadow: "0 8px 24px rgba(46,39,66,0.08)"
                 - min-height: "130px"
-                - text-align: "left"
+                - overflow: "hidden"
+                - position: "relative"
               icon:
                 - color: "#2E2742"
                 - width: "16px"
@@ -1244,11 +1342,13 @@ views:
                 - font-size: "14px"
                 - font-weight: "700"
                 - color: "#2E2742"
-                - margin-top: "32px"
+                - text-align: "left"
               label:
                 - font-size: "10px"
                 - color: "rgba(46,39,66,0.65)"
+                - text-align: "left"
 
+          # Cena: Foco
           - type: custom:button-card
             entity: scene.foco
             name: "Foco"
@@ -1265,8 +1365,10 @@ views:
                 - background: "#BFDDC4"
                 - border-radius: "26px"
                 - padding: "14px"
+                - box-shadow: "0 8px 24px rgba(46,39,66,0.08)"
                 - min-height: "130px"
-                - text-align: "left"
+                - overflow: "hidden"
+                - position: "relative"
               icon:
                 - color: "#2E2742"
                 - width: "16px"
@@ -1278,79 +1380,13 @@ views:
                 - font-size: "14px"
                 - font-weight: "700"
                 - color: "#2E2742"
-                - margin-top: "32px"
+                - text-align: "left"
               label:
                 - font-size: "10px"
                 - color: "rgba(46,39,66,0.65)"
-
-          - type: custom:button-card
-            entity: scene.cinema
-            name: "Cinema"
-            label: "6 dispositivos · noite"
-            show_label: true
-            icon: mdi:movie-play
-            tap_action:
-              action: call-service
-              service: scene.turn_on
-              target:
-                entity_id: scene.cinema
-            styles:
-              card:
-                - background: "#3D3654"
-                - border-radius: "26px"
-                - padding: "14px"
-                - min-height: "130px"
-                - box-shadow: "0 16px 40px rgba(46,39,66,0.25)"
                 - text-align: "left"
-              icon:
-                - color: "#FFFFFF"
-                - width: "16px"
-                - padding: "8px"
-                - border-radius: "50%"
-                - background: "rgba(255,255,255,0.15)"
-              name:
-                - font-size: "14px"
-                - font-weight: "700"
-                - color: "#FFFFFF"
-                - margin-top: "32px"
-              label:
-                - font-size: "10px"
-                - color: "rgba(255,255,255,0.55)"
 
-          - type: custom:button-card
-            entity: scene.boa_noite
-            name: "Boa Noite"
-            label: "8 dispositivos · 22:30"
-            show_label: true
-            icon: mdi:weather-night
-            tap_action:
-              action: call-service
-              service: scene.turn_on
-              target:
-                entity_id: scene.boa_noite
-            styles:
-              card:
-                - background: "#F1DCD4"
-                - border-radius: "26px"
-                - padding: "14px"
-                - min-height: "130px"
-                - text-align: "left"
-              icon:
-                - color: "#2E2742"
-                - width: "16px"
-                - padding: "8px"
-                - border-radius: "50%"
-                - background: "#FFFFFF"
-                - box-shadow: "0 4px 12px rgba(46,39,66,0.12)"
-              name:
-                - font-size: "14px"
-                - font-weight: "700"
-                - color: "#2E2742"
-                - margin-top: "32px"
-              label:
-                - font-size: "10px"
-                - color: "rgba(46,39,66,0.65)"
-
+          # Cena: Almoço
           - type: custom:button-card
             entity: scene.almoco
             name: "Almoço"
@@ -1367,8 +1403,10 @@ views:
                 - background: "#D2C5E6"
                 - border-radius: "26px"
                 - padding: "14px"
+                - box-shadow: "0 8px 24px rgba(46,39,66,0.08)"
                 - min-height: "130px"
-                - text-align: "left"
+                - overflow: "hidden"
+                - position: "relative"
               icon:
                 - color: "#2E2742"
                 - width: "16px"
@@ -1380,11 +1418,88 @@ views:
                 - font-size: "14px"
                 - font-weight: "700"
                 - color: "#2E2742"
-                - margin-top: "32px"
+                - text-align: "left"
               label:
                 - font-size: "10px"
                 - color: "rgba(46,39,66,0.65)"
+                - text-align: "left"
 
+          # Cena: Cinema (dark)
+          - type: custom:button-card
+            entity: scene.cinema
+            name: "Cinema"
+            label: "6 dispositivos · noite"
+            show_label: true
+            icon: mdi:movie-play
+            tap_action:
+              action: call-service
+              service: scene.turn_on
+              target:
+                entity_id: scene.cinema
+            styles:
+              card:
+                - background: "#3D3654"
+                - border-radius: "26px"
+                - padding: "14px"
+                - box-shadow: "0 16px 40px rgba(46,39,66,0.25)"
+                - min-height: "130px"
+                - overflow: "hidden"
+                - position: "relative"
+              icon:
+                - color: "#FFFFFF"
+                - width: "16px"
+                - padding: "8px"
+                - border-radius: "50%"
+                - background: "rgba(255,255,255,0.15)"
+              name:
+                - font-size: "14px"
+                - font-weight: "700"
+                - color: "#FFFFFF"
+                - text-align: "left"
+              label:
+                - font-size: "10px"
+                - color: "rgba(255,255,255,0.55)"
+                - text-align: "left"
+
+          # Cena: Boa Noite
+          - type: custom:button-card
+            entity: scene.boa_noite
+            name: "Boa Noite"
+            label: "8 dispositivos · 22:30"
+            show_label: true
+            icon: mdi:weather-night
+            tap_action:
+              action: call-service
+              service: scene.turn_on
+              target:
+                entity_id: scene.boa_noite
+            styles:
+              card:
+                - background: "#F1DCD4"
+                - border-radius: "26px"
+                - padding: "14px"
+                - box-shadow: "0 8px 24px rgba(46,39,66,0.08)"
+                - min-height: "130px"
+                - overflow: "hidden"
+                - position: "relative"
+              icon:
+                - color: "#2E2742"
+                - width: "16px"
+                - padding: "8px"
+                - border-radius: "50%"
+                - background: "#FFFFFF"
+                - box-shadow: "0 4px 12px rgba(46,39,66,0.12)"
+              name:
+                - font-size: "14px"
+                - font-weight: "700"
+                - color: "#2E2742"
+                - text-align: "left"
+              label:
+                - font-size: "10px"
+                - color: "rgba(46,39,66,0.65)"
+                - text-align: "left"
+
+          # Cena: Ausente
           - type: custom:button-card
             entity: scene.ausente
             name: "Ausente"
@@ -1401,8 +1516,10 @@ views:
                 - background: "#F08648"
                 - border-radius: "26px"
                 - padding: "14px"
+                - box-shadow: "0 8px 24px rgba(240,134,72,0.3)"
                 - min-height: "130px"
-                - text-align: "left"
+                - overflow: "hidden"
+                - position: "relative"
               icon:
                 - color: "#FFFFFF"
                 - width: "16px"
@@ -1413,23 +1530,54 @@ views:
                 - font-size: "14px"
                 - font-weight: "700"
                 - color: "#FFFFFF"
-                - margin-top: "32px"
+                - text-align: "left"
               label:
                 - font-size: "10px"
                 - color: "rgba(255,255,255,0.75)"
+                - text-align: "left"
 
-# ══════════════════════════════════════════════════════════════════════════════
-# 05 · ENERGIA
-# ══════════════════════════════════════════════════════════════════════════════
+      # ── Automações ativas ───────────────────────────────────────────────────
+      - type: custom:button-card
+        name: "Automações"
+        label: "Gerenciar automações do HA"
+        show_label: true
+        icon: mdi:robot-outline
+        tap_action:
+          action: navigate
+          navigation_path: /config/automation
+        styles:
+          card:
+            - background: "#2E2742"
+            - border-radius: "26px"
+            - padding: "16px"
+            - box-shadow: "0 16px 40px rgba(46,39,66,0.2)"
+          icon:
+            - color: "#F08648"
+            - width: "22px"
+            - padding: "9px"
+            - border-radius: "50%"
+            - background: "rgba(240,134,72,0.2)"
+          name:
+            - font-size: "13px"
+            - font-weight: "700"
+            - color: "#FFFFFF"
+            - text-align: "left"
+            - margin-top: "4px"
+          label:
+            - font-size: "11px"
+            - color: "rgba(255,255,255,0.55)"
+            - text-align: "left"
+
   - title: "⚡ Energia"
     path: energia
     icon: mdi:lightning-bolt
     background: "#EFE7D8"
     cards:
 
+      # ── Cabeçalho ───────────────────────────────────────────────────────────
       - type: custom:button-card
         name: "Energia"
-        label: "ESTA SEMANA"
+        label: "Esta semana"
         show_label: true
         show_icon: false
         styles:
@@ -1448,10 +1596,11 @@ views:
             - text-transform: "uppercase"
             - letter-spacing: "0.06em"
 
+      # ── Hero Card: Consumo Total ─────────────────────────────────────────────
       - type: custom:button-card
         entity: sensor.energia_total_semana
-        name: "[[[ return entity ? entity.state : '24.8' ]]]"
-        label: "kWh — CONSUMO TOTAL"
+        name: "kWh"
+        label: "Consumo total da semana"
         show_label: true
         icon: mdi:lightning-bolt
         tap_action:
@@ -1465,8 +1614,7 @@ views:
             - box-shadow: "0 18px 40px rgba(20,15,35,0.35)"
             - overflow: "hidden"
             - position: "relative"
-            - min-height: "120px"
-            - text-align: "left"
+            - min-height: "140px"
           icon:
             - color: "#FFFFFF"
             - width: "28px"
@@ -1479,35 +1627,55 @@ views:
             - letter-spacing: "-0.03em"
             - color: "#FFFFFF"
             - line-height: "1"
+            - text-align: "left"
           label:
             - font-size: "11px"
             - color: "rgba(255,255,255,0.7)"
+            - text-align: "left"
             - text-transform: "uppercase"
             - letter-spacing: "0.08em"
             - font-weight: "700"
         card_mod:
           style: |
+            ha-card::before {
+              content: '−12% vs sem. anterior';
+              position: absolute;
+              bottom: 20px;
+              left: 20px;
+              background: #BFDDC4;
+              color: #2E2742;
+              font-size: 11px;
+              font-weight: 700;
+              padding: 4px 10px;
+              border-radius: 999px;
+            }
             ha-card::after {
               content: '';
               position: absolute;
-              top: -30px; right: -30px;
-              width: 160px; height: 160px;
+              top: -30px;
+              right: -30px;
+              width: 160px;
+              height: 160px;
               border-radius: 50%;
               background: #F08648;
               opacity: 0.95;
             }
 
+      # ── Gráfico de Histórico (mini-graph-card) ─────────────────────────────
       - type: custom:mini-graph-card
         entity: sensor.energia_total_diaria
-        name: "Consumo Diário — últimos 14 dias"
+        name: "Consumo Diário"
         detail: 2
         hours_to_show: 336
+        points_per_hour: 0.1428
         group_by: date
         show:
           state: true
           graph: bar
-          labels: false
+          labels: true
+          name: true
           icon: false
+          extrema: true
         bar_spacing: 4
         line_color: "#F08648"
         card_mod:
@@ -1519,6 +1687,58 @@ views:
               padding: 16px;
             }
 
+      # ── Seletor de Período ──────────────────────────────────────────────────
+      - type: horizontal-stack
+        cards:
+          - type: custom:button-card
+            name: "Dia"
+            tap_action:
+              action: navigate
+              navigation_path: /energy
+            styles:
+              card:
+                - background: "#FFFFFF"
+                - border-radius: "999px"
+                - padding: "8px 0"
+                - box-shadow: "0 4px 12px rgba(46,39,66,0.06)"
+              name:
+                - font-size: "12px"
+                - font-weight: "700"
+                - color: "#7A7388"
+
+          - type: custom:button-card
+            name: "Semana"
+            tap_action:
+              action: navigate
+              navigation_path: /energy
+            styles:
+              card:
+                - background: "#2E2742"
+                - border-radius: "999px"
+                - padding: "8px 0"
+                - box-shadow: "0 4px 12px rgba(46,39,66,0.2)"
+              name:
+                - font-size: "12px"
+                - font-weight: "700"
+                - color: "#FFFFFF"
+
+          - type: custom:button-card
+            name: "Mês"
+            tap_action:
+              action: navigate
+              navigation_path: /energy
+            styles:
+              card:
+                - background: "#FFFFFF"
+                - border-radius: "999px"
+                - padding: "8px 0"
+                - box-shadow: "0 4px 12px rgba(46,39,66,0.06)"
+              name:
+                - font-size: "12px"
+                - font-weight: "700"
+                - color: "#7A7388"
+
+      # ── Maiores Consumidores ────────────────────────────────────────────────
       - type: custom:button-card
         name: "Maiores consumidores"
         show_icon: false
@@ -1533,10 +1753,11 @@ views:
             - color: "#2E2742"
             - text-align: "left"
 
+      # Ar-condicionado (maior consumidor)
       - type: custom:button-card
         entity: sensor.ac_sala_energia
         name: "Ar-Cond. Sala"
-        label: "[[[ return entity ? entity.state + ' kWh · 34%' : '8.4 kWh · 34%' ]]]"
+        label: "[[[ return entity.state + ' kWh · 34%' ]]]"
         show_label: true
         icon: mdi:air-conditioner
         styles:
@@ -1560,11 +1781,24 @@ views:
             - font-size: "11px"
             - color: "#7A7388"
             - text-align: "right"
+        card_mod:
+          style: |
+            ha-card::after {
+              content: '';
+              display: block;
+              height: 5px;
+              background: rgba(46,39,66,0.06);
+              border-radius: 999px;
+              margin-top: 8px;
+              overflow: hidden;
+              position: relative;
+            }
 
+      # Geladeira
       - type: custom:button-card
         entity: sensor.geladeira_energia
         name: "Geladeira"
-        label: "[[[ return entity ? entity.state + ' kWh · 25%' : '6.2 kWh · 25%' ]]]"
+        label: "[[[ return entity.state + ' kWh · 25%' ]]]"
         show_label: true
         icon: mdi:fridge-outline
         styles:
@@ -1589,10 +1823,11 @@ views:
             - color: "#7A7388"
             - text-align: "right"
 
+      # Iluminação
       - type: custom:button-card
         entity: sensor.iluminacao_energia
         name: "Iluminação"
-        label: "[[[ return entity ? entity.state + ' kWh · 15%' : '3.8 kWh · 15%' ]]]"
+        label: "[[[ return entity.state + ' kWh · 15%' ]]]"
         show_label: true
         icon: mdi:lightbulb-group-outline
         styles:
@@ -1617,6 +1852,36 @@ views:
             - color: "#7A7388"
             - text-align: "right"
 
+      # TV Sala
+      - type: custom:button-card
+        entity: sensor.tv_sala_energia
+        name: "TV Sala"
+        label: "[[[ return entity.state + ' kWh · 8%' ]]]"
+        show_label: true
+        icon: mdi:television
+        styles:
+          card:
+            - background: "#FFFFFF"
+            - border-radius: "20px"
+            - padding: "12px 14px"
+            - box-shadow: "0 4px 12px rgba(46,39,66,0.06)"
+          icon:
+            - color: "#E5B7AC"
+            - width: "18px"
+            - padding: "10px"
+            - border-radius: "12px"
+            - background: "#F1DCD4"
+          name:
+            - font-size: "13px"
+            - font-weight: "700"
+            - color: "#2E2742"
+            - text-align: "left"
+          label:
+            - font-size: "11px"
+            - color: "#7A7388"
+            - text-align: "right"
+
+      # ── Link para o painel de Energia nativo ────────────────────────────────
       - type: custom:button-card
         name: "Ver painel completo de Energia"
         icon: mdi:open-in-new
@@ -1637,18 +1902,16 @@ views:
             - font-weight: "700"
             - color: "#FFFFFF"
 
-# ══════════════════════════════════════════════════════════════════════════════
-# 06 · ACESSOS
-# ══════════════════════════════════════════════════════════════════════════════
   - title: "🚪 Acessos"
     path: acessos
     icon: mdi:door-open
     background: "#EFE7D8"
     cards:
 
+      # ── Cabeçalho ───────────────────────────────────────────────────────────
       - type: custom:button-card
         name: "Acessos"
-        label: "SALA · ABERTURAS"
+        label: "Sala · Aberturas"
         show_label: true
         show_icon: false
         styles:
@@ -1667,6 +1930,7 @@ views:
             - text-transform: "uppercase"
             - letter-spacing: "0.06em"
 
+      # ── Card Hero: Cortinas ─────────────────────────────────────────────────
       - type: cover
         entity: cover.sala_cortinas
         card_mod:
@@ -1678,7 +1942,11 @@ views:
               padding: 18px;
               overflow: hidden;
             }
+            .card-content {
+              padding: 0 !important;
+            }
 
+      # ── Presets de Cortinas ─────────────────────────────────────────────────
       - type: horizontal-stack
         cards:
           - type: custom:button-card
@@ -1702,6 +1970,7 @@ views:
                 - font-size: "12px"
                 - font-weight: "700"
                 - color: "#FFFFFF"
+
           - type: custom:button-card
             name: "Meio"
             icon: mdi:curtains
@@ -1716,6 +1985,7 @@ views:
                 - background: "#EFE7D8"
                 - border-radius: "999px"
                 - padding: "12px 0"
+                - box-shadow: "0 4px 12px rgba(46,39,66,0.06)"
               icon:
                 - color: "#2E2742"
                 - width: "16px"
@@ -1723,6 +1993,7 @@ views:
                 - font-size: "12px"
                 - font-weight: "700"
                 - color: "#2E2742"
+
           - type: custom:button-card
             name: "Abrir"
             icon: mdi:curtains
@@ -1733,70 +2004,66 @@ views:
                 entity_id: cover.sala_cortinas
             styles:
               card:
-                - background: "#F08648"
+                - background: "#EFE7D8"
                 - border-radius: "999px"
                 - padding: "12px 0"
+                - box-shadow: "0 4px 12px rgba(46,39,66,0.06)"
               icon:
-                - color: "#FFFFFF"
+                - color: "#2E2742"
                 - width: "16px"
               name:
                 - font-size: "12px"
                 - font-weight: "700"
-                - color: "#FFFFFF"
+                - color: "#2E2742"
 
+      # ── Porta + Janela (grid 2 colunas) ────────────────────────────────────
       - type: grid
         columns: 2
         square: false
         cards:
+          # Porta / Fechadura
           - type: custom:button-card
             entity: lock.porta_entrada
             name: "Porta Entrada"
-            label: "[[[ return entity && entity.state === 'locked' ? 'Trancada · 14:22' : 'Destrancada' ]]]"
+            label: "[[[ return entity.state === 'locked' ? 'Trancada · 14:22' : 'Destrancada' ]]]"
             show_label: true
-            icon: "[[[ return entity && entity.state === 'locked' ? 'mdi:lock' : 'mdi:lock-open' ]]]"
+            icon: "[[[ return entity.state === 'locked' ? 'mdi:lock' : 'mdi:lock-open' ]]]"
             tap_action:
-              action: more-info
-            custom_fields:
-              toggle_sw: >
-                [[[
-                  const on = entity && entity.state === 'locked';
-                  return `<div style="width:44px;height:26px;border-radius:13px;background:${on?'#F08648':'#C8C0D0'};position:relative;"><div style="position:absolute;width:20px;height:20px;background:white;border-radius:50%;top:3px;${on?'right:3px':'left:3px'};box-shadow:0 1px 4px rgba(0,0,0,0.3);"></div></div>`;
-                ]]]
+              action: toggle
             styles:
-              grid:
-                - grid-template-areas: '"i toggle_sw" "n n" "l l"'
-                - grid-template-columns: "min-content 1fr"
-              custom_fields:
-                toggle_sw:
-                  - justify-self: "end"
-                  - align-self: "start"
               card:
-                - background: "[[[ return entity && entity.state === 'locked' ? '#2E2742' : '#FFFFFF' ]]]"
+                - background: "[[[ return entity.state === 'locked' ? '#2E2742' : '#FFFFFF' ]]]"
                 - border-radius: "26px"
                 - padding: "14px"
-                - min-height: "180px"
+                - box-shadow: "[[[ return entity.state === 'locked' ? '0 18px 40px rgba(20,15,35,0.35)' : '0 8px 24px rgba(46,39,66,0.08)' ]]]"
+                - min-height: "200px"
+                - display: "flex"
+                - flex-direction: "column"
+                - justify-content: "space-between"
                 - transition: "all 0.3s"
               icon:
-                - color: "[[[ return entity && entity.state === 'locked' ? '#FFFFFF' : '#2E2742' ]]]"
+                - color: "[[[ return entity.state === 'locked' ? '#FFFFFF' : '#2E2742' ]]]"
                 - width: "20px"
                 - padding: "9px"
                 - border-radius: "50%"
-                - background: "[[[ return entity && entity.state === 'locked' ? 'rgba(255,255,255,0.12)' : '#F1DCD4' ]]]"
+                - background: "[[[ return entity.state === 'locked' ? 'rgba(255,255,255,0.12)' : '#F1DCD4' ]]]"
               name:
                 - font-size: "14px"
                 - font-weight: "700"
-                - color: "[[[ return entity && entity.state === 'locked' ? '#FFFFFF' : '#2E2742' ]]]"
+                - color: "[[[ return entity.state === 'locked' ? '#FFFFFF' : '#2E2742' ]]]"
                 - text-align: "left"
                 - margin-top: "18px"
               label:
                 - font-size: "11px"
-                - color: "[[[ return entity && entity.state === 'locked' ? 'rgba(255,255,255,0.55)' : '#7A7388' ]]]"
+                - color: "[[[ return entity.state === 'locked' ? 'rgba(255,255,255,0.55)' : '#7A7388' ]]]"
                 - text-align: "left"
+                - margin-top: "2px"
 
+          # Janela
           - type: custom:button-card
             entity: cover.cozinha_janela
             name: "Janela Cozinha"
-            label: "[[[ if(!entity) return '—'; const p=entity.attributes.current_position; return p>0?`Aberta ${p}%`:'Fechada'; ]]]"
+            label: "[[[ const pos = entity.attributes.current_position; return pos > 0 ? `Aberta ${pos}%` : 'Fechada' ]]]"
             show_label: true
             icon: mdi:window-open
             tap_action:
@@ -1807,7 +2074,7 @@ views:
                 - border-radius: "26px"
                 - padding: "14px"
                 - box-shadow: "0 8px 24px rgba(46,39,66,0.08)"
-                - min-height: "180px"
+                - min-height: "200px"
               icon:
                 - color: "#2E2742"
                 - width: "20px"
@@ -1824,6 +2091,34 @@ views:
                 - font-size: "11px"
                 - color: "#7A7388"
                 - text-align: "left"
+
+      # ── Janela — controle de posição ───────────────────────────────────────
+      - type: cover
+        entity: cover.cozinha_janela
+        card_mod:
+          style: |
+            ha-card {
+              background: #FFFFFF !important;
+              border-radius: 26px !important;
+              box-shadow: 0 8px 24px rgba(46,39,66,0.08) !important;
+            }
+
+      # ── Atalho: Fechar Tudo / Abrir Dia ────────────────────────────────────
+      - type: custom:button-card
+        name: "Controle Geral de Aberturas"
+        show_icon: false
+        styles:
+          card:
+            - background: "transparent"
+            - box-shadow: "none"
+            - padding: "8px 4px 4px"
+          name:
+            - font-size: "11px"
+            - font-weight: "700"
+            - color: "#7A7388"
+            - text-transform: "uppercase"
+            - letter-spacing: "0.06em"
+            - text-align: "left"
 
       - type: horizontal-stack
         cards:
@@ -1846,6 +2141,7 @@ views:
                 - font-size: "12px"
                 - font-weight: "700"
                 - color: "#FFFFFF"
+
           - type: custom:button-card
             name: "Abrir dia"
             icon: mdi:weather-sunny
@@ -1866,18 +2162,37 @@ views:
                 - font-weight: "700"
                 - color: "#FFFFFF"
 
-# ══════════════════════════════════════════════════════════════════════════════
-# 07 · SENSORES
-# ══════════════════════════════════════════════════════════════════════════════
+      # ── Status de todas as aberturas ───────────────────────────────────────
+      - type: entities
+        title: "Status de Aberturas"
+        entities:
+          - entity: cover.sala_cortinas
+            name: "Cortinas — Sala"
+          - entity: cover.cozinha_janela
+            name: "Janela — Cozinha"
+          - entity: lock.porta_entrada
+            name: "Porta — Entrada"
+          - entity: lock.porta_garagem
+            name: "Porta — Garagem"
+            icon: mdi:garage
+        card_mod:
+          style: |
+            ha-card {
+              background: #FFFFFF !important;
+              border-radius: 26px !important;
+              box-shadow: 0 8px 24px rgba(46,39,66,0.08) !important;
+            }
+
   - title: "📡 Sensores"
     path: sensores
     icon: mdi:chart-scatter-plot
     background: "#EFE7D8"
     cards:
 
+      # ── Cabeçalho ───────────────────────────────────────────────────────────
       - type: custom:button-card
-        name: "5 sensores ativos"
-        label: "EM TEMPO REAL"
+        name: "Sensores"
+        label: "Em tempo real"
         show_label: true
         show_icon: false
         styles:
@@ -1890,27 +2205,26 @@ views:
             - font-weight: "700"
             - color: "#2E2742"
             - letter-spacing: "-0.02em"
-            - text-align: "left"
           label:
             - font-size: "11px"
             - color: "#7A7388"
             - font-weight: "700"
             - text-transform: "uppercase"
             - letter-spacing: "0.06em"
-            - text-align: "left"
 
+      # ── Grid de Sensores ─────────────────────────────────────────────────────
       - type: grid
         columns: 2
         square: false
         cards:
+
+          # Temperatura
           - type: custom:button-card
             entity: sensor.sala_temperatura
-            name: "[[[ return entity ? entity.state + ' °C' : '— °C' ]]]"
-            label: "TEMPERATURA"
+            name: "Temperatura"
+            label: "[[[ const s = parseFloat(entity.state); return `${s > 22 ? '↑' : '↓'} 0.6° na última hora` ]]]"
             show_label: true
             icon: mdi:thermometer
-            tap_action:
-              action: more-info
             styles:
               card:
                 - background: "#FFFFFF"
@@ -1933,40 +2247,40 @@ views:
                 - color: "#2E2742"
                 - margin-top: "14px"
               label:
-                - font-size: "9px"
-                - font-weight: "700"
+                - font-size: "11px"
                 - color: "#7A7388"
-                - text-transform: "uppercase"
-                - letter-spacing: "0.06em"
+            state_display: "[[[ return entity.state + ' °C' ]]]"
             card_mod:
               style: |
                 ha-card::before {
-                  content: '● LIVE';
+                  content: 'TEMPERATURA';
                   position: absolute;
-                  top: 14px; right: 14px;
-                  font-size: 10px;
+                  top: 14px;
+                  left: 50px;
+                  font-size: 9px;
                   font-weight: 700;
-                  color: #F08648;
-                  letter-spacing: 0.05em;
+                  color: #7A7388;
+                  letter-spacing: 0.06em;
                 }
                 ha-card::after {
                   content: '';
                   position: absolute;
-                  top: -30px; right: -30px;
-                  width: 100px; height: 100px;
+                  top: -30px;
+                  right: -30px;
+                  width: 100px;
+                  height: 100px;
                   border-radius: 50%;
                   background: #F1DCD4;
                   opacity: 0.6;
                 }
 
+          # Umidade
           - type: custom:button-card
             entity: sensor.sala_umidade
-            name: "[[[ return entity ? entity.state + ' %' : '— %' ]]]"
-            label: "UMIDADE"
+            name: "Umidade"
+            label: "Confortável"
             show_label: true
             icon: mdi:water-percent
-            tap_action:
-              action: more-info
             styles:
               card:
                 - background: "#FFFFFF"
@@ -1989,37 +2303,30 @@ views:
                 - color: "#2E2742"
                 - margin-top: "14px"
               label:
-                - font-size: "9px"
-                - font-weight: "700"
+                - font-size: "11px"
                 - color: "#7A7388"
-                - text-transform: "uppercase"
-                - letter-spacing: "0.06em"
+            state_display: "[[[ return entity.state + ' %' ]]]"
             card_mod:
               style: |
-                ha-card::before {
-                  content: '● LIVE';
-                  position: absolute;
-                  top: 14px; right: 14px;
-                  font-size: 10px; font-weight: 700;
-                  color: #F08648; letter-spacing: 0.05em;
-                }
                 ha-card::after {
                   content: '';
                   position: absolute;
-                  top: -30px; right: -30px;
-                  width: 100px; height: 100px;
+                  top: -30px;
+                  right: -30px;
+                  width: 100px;
+                  height: 100px;
                   border-radius: 50%;
-                  background: #BFDDC4; opacity: 0.6;
+                  background: #BFDDC4;
+                  opacity: 0.6;
                 }
 
+          # Luminosidade (full width)
           - type: custom:button-card
             entity: sensor.sala_luminosidade
-            name: "[[[ return entity ? entity.state + ' lux' : '— lux' ]]]"
-            label: "LUMINOSIDADE"
+            name: "Luminosidade"
+            label: "Crepúsculo · brando"
             show_label: true
             icon: mdi:brightness-5
-            tap_action:
-              action: more-info
             styles:
               card:
                 - background: "#FFFFFF"
@@ -2043,37 +2350,30 @@ views:
                 - color: "#2E2742"
                 - margin-top: "14px"
               label:
-                - font-size: "9px"
-                - font-weight: "700"
+                - font-size: "11px"
                 - color: "#7A7388"
-                - text-transform: "uppercase"
-                - letter-spacing: "0.06em"
+            state_display: "[[[ return entity.state + ' lux' ]]]"
             card_mod:
               style: |
-                ha-card::before {
-                  content: '● LIVE';
-                  position: absolute;
-                  top: 14px; right: 14px;
-                  font-size: 10px; font-weight: 700;
-                  color: #F08648; letter-spacing: 0.05em;
-                }
                 ha-card::after {
                   content: '';
                   position: absolute;
-                  top: -30px; right: -30px;
-                  width: 100px; height: 100px;
+                  top: -30px;
+                  right: -30px;
+                  width: 100px;
+                  height: 100px;
                   border-radius: 50%;
-                  background: #F6B584; opacity: 0.6;
+                  background: #F6B584;
+                  opacity: 0.6;
                 }
 
+          # Movimento (dark)
           - type: custom:button-card
             entity: binary_sensor.sala_movimento
-            name: "[[[ return entity && entity.state === 'on' ? '2s atrás' : 'Quieto' ]]]"
-            label: "MOVIMENTO"
+            name: "Movimento"
+            label: "[[[ return entity.state === 'on' ? 'Detectado · sala' : 'Sem movimento' ]]]"
             show_label: true
             icon: mdi:motion-sensor
-            tap_action:
-              action: more-info
             styles:
               card:
                 - background: "#2E2742"
@@ -2096,29 +2396,30 @@ views:
                 - color: "#FFFFFF"
                 - margin-top: "14px"
               label:
-                - font-size: "9px"
-                - font-weight: "700"
+                - font-size: "11px"
                 - color: "rgba(255,255,255,0.55)"
-                - text-transform: "uppercase"
-                - letter-spacing: "0.06em"
+            state_display: "[[[ return entity.state === 'on' ? '2s atrás' : 'Quieto' ]]]"
             card_mod:
               style: |
-                ha-card::before {
-                  content: '● LIVE';
+                ha-card::after {
+                  content: '';
                   position: absolute;
-                  top: 14px; right: 14px;
-                  font-size: 10px; font-weight: 700;
-                  color: #F08648; letter-spacing: 0.05em;
+                  top: -30px;
+                  right: -30px;
+                  width: 100px;
+                  height: 100px;
+                  border-radius: 50%;
+                  background: #D2C5E6;
+                  opacity: 0.6;
                 }
 
+          # Ocupação / Presença
           - type: custom:button-card
             entity: sensor.sala_ocupacao
-            name: "[[[ return entity ? entity.state + ' pessoas' : '— pessoas' ]]]"
-            label: "OCUPAÇÃO"
+            name: "Ocupação"
+            label: "Sala + Cozinha"
             show_label: true
             icon: mdi:account-group
-            tap_action:
-              action: more-info
             styles:
               card:
                 - background: "#FFFFFF"
@@ -2141,24 +2442,27 @@ views:
                 - color: "#2E2742"
                 - margin-top: "14px"
               label:
-                - font-size: "9px"
-                - font-weight: "700"
+                - font-size: "11px"
                 - color: "#7A7388"
-                - text-transform: "uppercase"
-                - letter-spacing: "0.06em"
+            state_display: "[[[ return entity.state + ' pessoas' ]]]"
             card_mod:
               style: |
-                ha-card::before {
-                  content: '● LIVE';
+                ha-card::after {
+                  content: '';
                   position: absolute;
-                  top: 14px; right: 14px;
-                  font-size: 10px; font-weight: 700;
-                  color: #F08648; letter-spacing: 0.05em;
+                  top: -30px;
+                  right: -30px;
+                  width: 100px;
+                  height: 100px;
+                  border-radius: 50%;
+                  background: #F6B584;
+                  opacity: 0.6;
                 }
 
+      # ── Gráfico de Temperatura 24h ───────────────────────────────────────────
       - type: custom:mini-graph-card
         entity: sensor.sala_temperatura
-        name: "Temperatura 24h — Min 19° · Máx 25°"
+        name: "Temperatura 24h"
         detail: 2
         hours_to_show: 24
         points_per_hour: 4
@@ -2179,6 +2483,7 @@ views:
               padding: 16px;
             }
 
+      # ── Automações ativas respondendo a sensores ────────────────────────────
       - type: custom:button-card
         name: "3 automações ativas"
         label: "Reagindo a movimento, luz e temperatura"
@@ -2210,18 +2515,43 @@ views:
             - color: "rgba(255,255,255,0.6)"
             - text-align: "left"
 
-# ══════════════════════════════════════════════════════════════════════════════
-# 08 · VOZ
-# ══════════════════════════════════════════════════════════════════════════════
+      # ── Sensor: Qualidade do Ar / CO2 ──────────────────────────────────────
+      - type: entities
+        title: "Sensores Ambientais"
+        entities:
+          - entity: sensor.sala_temperatura
+            name: "Temperatura"
+            icon: mdi:thermometer
+          - entity: sensor.sala_umidade
+            name: "Umidade"
+            icon: mdi:water-percent
+          - entity: sensor.sala_luminosidade
+            name: "Luminosidade"
+            icon: mdi:brightness-5
+          - entity: binary_sensor.sala_movimento
+            name: "Movimento"
+            icon: mdi:motion-sensor
+          - entity: sensor.sala_co2
+            name: "CO₂"
+            icon: mdi:molecule-co2
+        card_mod:
+          style: |
+            ha-card {
+              background: #FFFFFF !important;
+              border-radius: 26px !important;
+              box-shadow: 0 8px 24px rgba(46,39,66,0.08) !important;
+            }
+
   - title: "🎙️ Voz"
     path: voz
     icon: mdi:microphone
     background: "#2E2742"
     cards:
 
+      # ── Cabeçalho ───────────────────────────────────────────────────────────
       - type: custom:button-card
         name: "Assistente de Voz"
-        label: "SALA PRINCIPAL"
+        label: "Sala principal"
         show_label: true
         show_icon: false
         styles:
@@ -2240,29 +2570,27 @@ views:
             - text-transform: "uppercase"
             - letter-spacing: "0.06em"
 
-      - type: custom:button-card
-        name: "Abrir Assistente (Assist)"
-        icon: mdi:microphone
-        tap_action:
-          action: assist
-        styles:
-          card:
-            - background: "#7FB892"
-            - border-radius: "999px"
-            - padding: "16px"
-            - box-shadow: "0 8px 32px rgba(127,184,146,0.4)"
-          icon:
-            - color: "#FFFFFF"
-            - width: "24px"
-          name:
-            - font-size: "14px"
-            - font-weight: "700"
-            - color: "#FFFFFF"
+      # ── Assistente HA Voice (Assist) ────────────────────────────────────────
+      - type: assist_satellite
+        entity: assist_satellite.nabu_casa_sala
+        card_mod:
+          style: |
+            ha-card {
+              background: rgba(255,255,255,0.06) !important;
+              border-radius: 32px !important;
+              box-shadow: none !important;
+              backdrop-filter: blur(20px);
+              color: #fff !important;
+            }
+            ha-card * {
+              color: #fff;
+            }
 
+      # ── Alexa (media player com wake word control) ───────────────────────────
       - type: custom:button-card
         entity: media_player.alexa_sala
         name: "Amazon Alexa"
-        label: "[[[ return entity && entity.state === 'on' ? 'Ouvindo...' : 'Em espera' ]]]"
+        label: "[[[ return entity.state === 'on' ? 'Ouvindo...' : 'Em espera' ]]]"
         show_label: true
         icon: mdi:amazon-alexa
         tap_action:
@@ -2280,6 +2608,7 @@ views:
             - padding: "20px"
             - border-radius: "50%"
             - background: "rgba(210,197,230,0.3)"
+            - box-shadow: "0 0 60px rgba(210,197,230,0.4)"
           name:
             - font-size: "18px"
             - font-weight: "700"
@@ -2289,10 +2618,11 @@ views:
             - font-size: "12px"
             - color: "rgba(255,255,255,0.55)"
 
+      # ── HA Voice (Nabu Casa / Wyoming) ────────────────────────────────────
       - type: custom:button-card
         entity: media_player.ha_voice_sala
         name: "HA Voice"
-        label: "[[[ return entity && entity.state === 'on' ? 'Ouvindo...' : 'Em espera' ]]]"
+        label: "[[[ return entity.state === 'on' ? 'Ouvindo...' : 'Em espera' ]]]"
         show_label: true
         icon: mdi:home-assistant
         tap_action:
@@ -2310,6 +2640,7 @@ views:
             - padding: "20px"
             - border-radius: "50%"
             - background: "rgba(191,221,196,0.3)"
+            - box-shadow: "0 0 60px rgba(191,221,196,0.4)"
           name:
             - font-size: "18px"
             - font-weight: "700"
@@ -2319,8 +2650,29 @@ views:
             - font-size: "12px"
             - color: "rgba(255,255,255,0.55)"
 
+      # ── Botão: Iniciar Assist ───────────────────────────────────────────────
       - type: custom:button-card
-        name: "SUGESTÕES"
+        name: "Abrir Assistente"
+        icon: mdi:microphone
+        tap_action:
+          action: assist
+        styles:
+          card:
+            - background: "#7FB892"
+            - border-radius: "999px"
+            - padding: "16px"
+            - box-shadow: "0 8px 32px rgba(127,184,146,0.4)"
+          icon:
+            - color: "#FFFFFF"
+            - width: "24px"
+          name:
+            - font-size: "14px"
+            - font-weight: "700"
+            - color: "#FFFFFF"
+
+      # ── Sugestões de comandos ───────────────────────────────────────────────
+      - type: custom:button-card
+        name: "Sugestões"
         show_icon: false
         styles:
           card:
@@ -2335,90 +2687,134 @@ views:
             - letter-spacing: "0.06em"
             - text-align: "left"
 
-      - type: custom:button-card
-        name: "\"Tocar lo-fi na sala\""
-        icon: mdi:music
-        tap_action:
-          action: call-service
-          service: media_player.play_media
-          service_data:
-            entity_id: media_player.sala
-            media_content_type: music
-            media_content_id: "lofi"
-        styles:
-          card:
-            - background: "rgba(255,255,255,0.06)"
-            - border-radius: "20px"
-            - padding: "12px 14px"
-            - box-shadow: "none"
-          icon:
-            - color: "#7FB892"
-            - width: "14px"
-          name:
-            - font-size: "13px"
-            - font-weight: "500"
-            - color: "rgba(255,255,255,0.85)"
-            - text-align: "left"
+      - type: entities
+        entities:
+          - type: custom:button-card
+            name: "\"Tocar lo-fi na sala\""
+            icon: mdi:music
+            tap_action:
+              action: call-service
+              service: media_player.play_media
+              service_data:
+                entity_id: media_player.sala
+                media_content_type: music
+                media_content_id: "lofi"
+            styles:
+              card:
+                - background: "rgba(255,255,255,0.06)"
+                - border-radius: "20px"
+                - padding: "12px 14px"
+                - box-shadow: "none"
+                - margin-bottom: "8px"
+              icon:
+                - color: "#7FB892"
+                - width: "14px"
+              name:
+                - font-size: "13px"
+                - font-weight: "500"
+                - color: "rgba(255,255,255,0.85)"
+                - text-align: "left"
 
-      - type: custom:button-card
-        name: "\"Ajustar termostato para 22°\""
-        icon: mdi:thermometer
-        tap_action:
-          action: call-service
-          service: climate.set_temperature
-          service_data:
-            entity_id: climate.sala_ac
-            temperature: 22
-        styles:
-          card:
-            - background: "rgba(255,255,255,0.06)"
-            - border-radius: "20px"
-            - padding: "12px 14px"
-            - box-shadow: "none"
-          icon:
-            - color: "#7FB892"
-            - width: "14px"
-          name:
-            - font-size: "13px"
-            - font-weight: "500"
-            - color: "rgba(255,255,255,0.85)"
-            - text-align: "left"
+          - type: custom:button-card
+            name: "\"Ajustar termostato para 22°\""
+            icon: mdi:thermometer
+            tap_action:
+              action: call-service
+              service: climate.set_temperature
+              service_data:
+                entity_id: climate.sala_ac
+                temperature: 22
+            styles:
+              card:
+                - background: "rgba(255,255,255,0.06)"
+                - border-radius: "20px"
+                - padding: "12px 14px"
+                - box-shadow: "none"
+                - margin-bottom: "8px"
+              icon:
+                - color: "#7FB892"
+                - width: "14px"
+              name:
+                - font-size: "13px"
+                - font-weight: "500"
+                - color: "rgba(255,255,255,0.85)"
+                - text-align: "left"
 
-      - type: custom:button-card
-        name: "\"Iniciar rotina Boa Noite\""
-        icon: mdi:weather-night
-        tap_action:
-          action: call-service
-          service: scene.turn_on
-          target:
-            entity_id: scene.boa_noite
-        styles:
-          card:
-            - background: "rgba(255,255,255,0.06)"
-            - border-radius: "20px"
-            - padding: "12px 14px"
-            - box-shadow: "none"
-          icon:
-            - color: "#7FB892"
-            - width: "14px"
-          name:
-            - font-size: "13px"
-            - font-weight: "500"
-            - color: "rgba(255,255,255,0.85)"
-            - text-align: "left"
+          - type: custom:button-card
+            name: "\"Iniciar rotina Boa Noite\""
+            icon: mdi:weather-night
+            tap_action:
+              action: call-service
+              service: scene.turn_on
+              target:
+                entity_id: scene.boa_noite
+            styles:
+              card:
+                - background: "rgba(255,255,255,0.06)"
+                - border-radius: "20px"
+                - padding: "12px 14px"
+                - box-shadow: "none"
+                - margin-bottom: "8px"
+              icon:
+                - color: "#7FB892"
+                - width: "14px"
+              name:
+                - font-size: "13px"
+                - font-weight: "500"
+                - color: "rgba(255,255,255,0.85)"
+                - text-align: "left"
 
-# ══════════════════════════════════════════════════════════════════════════════
-# 09 · COZINHA
-# ══════════════════════════════════════════════════════════════════════════════
+          - type: custom:button-card
+            name: "\"Está chovendo amanhã?\""
+            icon: mdi:weather-rainy
+            tap_action:
+              action: more-info
+              entity: weather.casa
+            styles:
+              card:
+                - background: "rgba(255,255,255,0.06)"
+                - border-radius: "20px"
+                - padding: "12px 14px"
+                - box-shadow: "none"
+              icon:
+                - color: "#7FB892"
+                - width: "14px"
+              name:
+                - font-size: "13px"
+                - font-weight: "500"
+                - color: "rgba(255,255,255,0.85)"
+                - text-align: "left"
+        card_mod:
+          style: |
+            ha-card {
+              background: transparent !important;
+              box-shadow: none !important;
+            }
+
+      # ── Histórico de conversas (últimos comandos) ───────────────────────────
+      - type: logbook
+        entity: assist_satellite.nabu_casa_sala
+        hours_to_show: 6
+        card_mod:
+          style: |
+            ha-card {
+              background: rgba(255,255,255,0.06) !important;
+              border-radius: 26px !important;
+              box-shadow: none !important;
+              backdrop-filter: blur(20px);
+              color: rgba(255,255,255,0.8) !important;
+            }
+
   - title: "🍳 Cozinha"
     path: cozinha
     icon: mdi:chef-hat
     background: "#EFE7D8"
     cards:
 
+      # ── Cabeçalho ───────────────────────────────────────────────────────────
       - type: custom:button-card
         name: "Cozinha"
-        label: "CÔMODO"
+        label: "Cômodo"
         show_label: true
         show_icon: false
         styles:
@@ -2440,6 +2836,7 @@ views:
             - letter-spacing: "0.06em"
             - text-align: "left"
 
+      # ── Card Hero: Em uso agora ──────────────────────────────────────────────
       - type: custom:button-card
         entity: switch.cafeteira
         name: "Café da manhã"
@@ -2448,411 +2845,364 @@ views:
         icon: mdi:coffee
         tap_action:
           action: more-info
-        custom_fields:
-          badge: "EM USO"
         styles:
           card:
             - background: "#FFFFFF"
             - border-radius: "32px"
-            - padding: "18px 16px 18px 20px"
+            - padding: "0"
             - box-shadow: "0 16px 40px rgba(46,39,66,0.10)"
             - overflow: "hidden"
             - position: "relative"
-            - min-height: "120px"
-            - text-align: "left"
-          grid:
-            - grid-template-areas: '"badge badge" "n n" "l l"'
-          custom_fields:
-            badge:
-              - font-size: "10px"
-              - font-weight: "700"
-              - color: "#E36A2A"
-              - letter-spacing: "0.08em"
-              - text-transform: "uppercase"
-              - margin-bottom: "4px"
+            - min-height: "130px"
           icon:
-            - display: "none"
+            - color: "#FFFFFF"
+            - width: "36px"
+            - position: "absolute"
+            - right: "22px"
+            - top: "24px"
+            - z-index: "1"
           name:
             - font-size: "20px"
             - font-weight: "700"
             - letter-spacing: "-0.02em"
             - color: "#2E2742"
+            - text-align: "left"
+            - padding: "18px 0 0 20px"
           label:
             - font-size: "11px"
             - color: "#7A7388"
+            - text-align: "left"
+            - padding-left: "20px"
         card_mod:
           style: |
+            ha-card::before {
+              content: 'EM USO';
+              position: absolute;
+              top: 18px;
+              left: 20px;
+              font-size: 10px;
+              font-weight: 700;
+              color: #E36A2A;
+              letter-spacing: 0.08em;
+              text-transform: uppercase;
+            }
             ha-card::after {
               content: '';
               position: absolute;
-              top: -10px; right: -30px;
-              width: 130px; height: 130px;
+              top: -10px;
+              right: -30px;
+              width: 130px;
+              height: 130px;
               border-radius: 50%;
               background: #F08648;
               z-index: 0;
             }
 
+      # ── Título da seção ────────────────────────────────────────────────────
+      - type: custom:button-card
+        name: "Eletrodomésticos"
+        show_icon: false
+        styles:
+          card:
+            - background: "transparent"
+            - box-shadow: "none"
+            - padding: "12px 4px 4px"
+          name:
+            - font-size: "13px"
+            - font-weight: "700"
+            - color: "#2E2742"
+            - text-align: "left"
+
+      # ── Grid de Eletrodomésticos (2 colunas) ────────────────────────────────
       - type: grid
         columns: 2
         square: false
         cards:
 
+          # Geladeira
           - type: custom:button-card
             entity: switch.geladeira
             name: "Geladeira"
-            label: "[[[ return entity && entity.state === 'on' ? '4 °C · Eco' : 'Em espera' ]]]"
+            label: "[[[ return entity.state === 'on' ? '4 °C · Eco' : 'Em espera' ]]]"
             show_label: true
             icon: mdi:fridge-outline
             tap_action:
               action: more-info
-            custom_fields:
-              toggle_sw: >
-                [[[
-                  const on = entity && entity.state === 'on';
-                  return `<div style="width:44px;height:26px;border-radius:13px;background:${on?'#F08648':'#C8C0D0'};position:relative;"><div style="position:absolute;width:20px;height:20px;background:white;border-radius:50%;top:3px;${on?'right:3px':'left:3px'};box-shadow:0 1px 4px rgba(0,0,0,0.3);"></div></div>`;
-                ]]]
             styles:
-              grid:
-                - grid-template-areas: '"i toggle_sw" "n n" "l l"'
-                - grid-template-columns: "min-content 1fr"
-              custom_fields:
-                toggle_sw:
-                  - justify-self: "end"
-                  - align-self: "start"
               card:
-                - background: "[[[ return entity && entity.state === 'on' ? '#FFFFFF' : '#FBF6EC' ]]]"
+                - background: "[[[ return entity.state === 'on' ? '#FFFFFF' : '#FBF6EC' ]]]"
                 - border-radius: "20px"
                 - padding: "12px"
                 - box-shadow: "0 4px 12px rgba(46,39,66,0.06)"
                 - min-height: "108px"
               icon:
-                - color: "[[[ return entity && entity.state === 'on' ? '#9E8AC4' : '#7A7388' ]]]"
+                - color: "[[[ return entity.state === 'on' ? '#9E8AC4' : '#7A7388' ]]]"
                 - width: "16px"
                 - padding: "8px"
                 - border-radius: "50%"
-                - background: "[[[ return entity && entity.state === 'on' ? '#D2C5E6' : 'rgba(46,39,66,0.06)' ]]]"
+                - background: "[[[ return entity.state === 'on' ? '#D2C5E6' : 'rgba(46,39,66,0.06)' ]]]"
               name:
                 - font-size: "13px"
                 - font-weight: "700"
                 - color: "#2E2742"
                 - text-align: "left"
-                - margin-top: "10px"
+                - margin-top: "12px"
               label:
                 - font-size: "10px"
                 - color: "#7A7388"
                 - text-align: "left"
 
-          - type: custom:button-card
-            entity: switch.cafeteira
-            name: "Cafeteira"
-            label: "[[[ return entity && entity.state === 'on' ? 'Coando · 70°' : 'Em espera' ]]]"
-            show_label: true
-            icon: mdi:coffee-maker
-            tap_action:
-              action: toggle
-            custom_fields:
-              toggle_sw: >
-                [[[
-                  const on = entity && entity.state === 'on';
-                  return `<div style="width:44px;height:26px;border-radius:13px;background:${on?'#F08648':'#C8C0D0'};position:relative;"><div style="position:absolute;width:20px;height:20px;background:white;border-radius:50%;top:3px;${on?'right:3px':'left:3px'};box-shadow:0 1px 4px rgba(0,0,0,0.3);"></div></div>`;
-                ]]]
-            styles:
-              grid:
-                - grid-template-areas: '"i toggle_sw" "n n" "l l"'
-                - grid-template-columns: "min-content 1fr"
-              custom_fields:
-                toggle_sw:
-                  - justify-self: "end"
-                  - align-self: "start"
-              card:
-                - background: "[[[ return entity && entity.state === 'on' ? '#FFFFFF' : '#FBF6EC' ]]]"
-                - border-radius: "20px"
-                - padding: "12px"
-                - box-shadow: "0 4px 12px rgba(46,39,66,0.06)"
-                - min-height: "108px"
-              icon:
-                - color: "[[[ return entity && entity.state === 'on' ? '#E36A2A' : '#7A7388' ]]]"
-                - width: "16px"
-                - padding: "8px"
-                - border-radius: "50%"
-                - background: "[[[ return entity && entity.state === 'on' ? '#F6B584' : 'rgba(46,39,66,0.06)' ]]]"
-              name:
-                - font-size: "13px"
-                - font-weight: "700"
-                - color: "#2E2742"
-                - text-align: "left"
-                - margin-top: "10px"
-              label:
-                - font-size: "10px"
-                - color: "#7A7388"
-                - text-align: "left"
-
-          - type: custom:button-card
-            entity: switch.airfryer
-            name: "AirFryer"
-            label: "[[[ return entity && entity.state === 'on' ? '180° · 12min' : 'Em espera' ]]]"
-            show_label: true
-            icon: mdi:pot-steam-outline
-            tap_action:
-              action: toggle
-            custom_fields:
-              toggle_sw: >
-                [[[
-                  const on = entity && entity.state === 'on';
-                  return `<div style="width:44px;height:26px;border-radius:13px;background:${on?'#F08648':'#C8C0D0'};position:relative;"><div style="position:absolute;width:20px;height:20px;background:white;border-radius:50%;top:3px;${on?'right:3px':'left:3px'};box-shadow:0 1px 4px rgba(0,0,0,0.3);"></div></div>`;
-                ]]]
-            styles:
-              grid:
-                - grid-template-areas: '"i toggle_sw" "n n" "l l"'
-                - grid-template-columns: "min-content 1fr"
-              custom_fields:
-                toggle_sw:
-                  - justify-self: "end"
-                  - align-self: "start"
-              card:
-                - background: "[[[ return entity && entity.state === 'on' ? '#FFFFFF' : '#FBF6EC' ]]]"
-                - border-radius: "20px"
-                - padding: "12px"
-                - box-shadow: "0 4px 12px rgba(46,39,66,0.06)"
-                - min-height: "108px"
-              icon:
-                - color: "[[[ return entity && entity.state === 'on' ? '#E36A2A' : '#7A7388' ]]]"
-                - width: "16px"
-                - padding: "8px"
-                - border-radius: "50%"
-                - background: "[[[ return entity && entity.state === 'on' ? '#F6B584' : 'rgba(46,39,66,0.06)' ]]]"
-              name:
-                - font-size: "13px"
-                - font-weight: "700"
-                - color: "#2E2742"
-                - text-align: "left"
-                - margin-top: "10px"
-              label:
-                - font-size: "10px"
-                - color: "#7A7388"
-                - text-align: "left"
-
+          # Microondas
           - type: custom:button-card
             entity: switch.microondas
             name: "Microondas"
-            label: "[[[ return entity && entity.state === 'on' ? '01:30 restante' : 'Em espera' ]]]"
+            label: "[[[ return entity.state === 'on' ? '01:30 restante' : 'Em espera' ]]]"
             show_label: true
             icon: mdi:microwave
             tap_action:
               action: toggle
-            custom_fields:
-              toggle_sw: >
-                [[[
-                  const on = entity && entity.state === 'on';
-                  return `<div style="width:44px;height:26px;border-radius:13px;background:${on?'#F08648':'#C8C0D0'};position:relative;"><div style="position:absolute;width:20px;height:20px;background:white;border-radius:50%;top:3px;${on?'right:3px':'left:3px'};box-shadow:0 1px 4px rgba(0,0,0,0.3);"></div></div>`;
-                ]]]
             styles:
-              grid:
-                - grid-template-areas: '"i toggle_sw" "n n" "l l"'
-                - grid-template-columns: "min-content 1fr"
-              custom_fields:
-                toggle_sw:
-                  - justify-self: "end"
-                  - align-self: "start"
               card:
-                - background: "[[[ return entity && entity.state === 'on' ? '#FFFFFF' : '#FBF6EC' ]]]"
+                - background: "[[[ return entity.state === 'on' ? '#FFFFFF' : '#FBF6EC' ]]]"
                 - border-radius: "20px"
                 - padding: "12px"
                 - box-shadow: "0 4px 12px rgba(46,39,66,0.06)"
                 - min-height: "108px"
               icon:
-                - color: "[[[ return entity && entity.state === 'on' ? '#E5B7AC' : '#7A7388' ]]]"
+                - color: "[[[ return entity.state === 'on' ? '#E5B7AC' : '#7A7388' ]]]"
                 - width: "16px"
                 - padding: "8px"
                 - border-radius: "50%"
-                - background: "[[[ return entity && entity.state === 'on' ? '#F1DCD4' : 'rgba(46,39,66,0.06)' ]]]"
+                - background: "[[[ return entity.state === 'on' ? '#F1DCD4' : 'rgba(46,39,66,0.06)' ]]]"
               name:
                 - font-size: "13px"
                 - font-weight: "700"
                 - color: "#2E2742"
                 - text-align: "left"
-                - margin-top: "10px"
+                - margin-top: "12px"
               label:
                 - font-size: "10px"
                 - color: "#7A7388"
                 - text-align: "left"
 
+          # Cafeteira
           - type: custom:button-card
-            entity: switch.liquidificador
-            name: "Liquidificador"
-            label: "[[[ return entity && entity.state === 'on' ? 'Vel 3' : 'Em espera' ]]]"
+            entity: switch.cafeteira
+            name: "Cafeteira"
+            label: "[[[ return entity.state === 'on' ? 'Coando · 70°' : 'Em espera' ]]]"
             show_label: true
-            icon: mdi:blender-outline
+            icon: mdi:coffee-maker
             tap_action:
               action: toggle
-            custom_fields:
-              toggle_sw: >
-                [[[
-                  const on = entity && entity.state === 'on';
-                  return `<div style="width:44px;height:26px;border-radius:13px;background:${on?'#F08648':'#C8C0D0'};position:relative;"><div style="position:absolute;width:20px;height:20px;background:white;border-radius:50%;top:3px;${on?'right:3px':'left:3px'};box-shadow:0 1px 4px rgba(0,0,0,0.3);"></div></div>`;
-                ]]]
             styles:
-              grid:
-                - grid-template-areas: '"i toggle_sw" "n n" "l l"'
-                - grid-template-columns: "min-content 1fr"
-              custom_fields:
-                toggle_sw:
-                  - justify-self: "end"
-                  - align-self: "start"
               card:
-                - background: "[[[ return entity && entity.state === 'on' ? '#FFFFFF' : '#FBF6EC' ]]]"
+                - background: "[[[ return entity.state === 'on' ? '#FFFFFF' : '#FBF6EC' ]]]"
                 - border-radius: "20px"
                 - padding: "12px"
                 - box-shadow: "0 4px 12px rgba(46,39,66,0.06)"
                 - min-height: "108px"
               icon:
-                - color: "[[[ return entity && entity.state === 'on' ? '#7FB892' : '#7A7388' ]]]"
+                - color: "[[[ return entity.state === 'on' ? '#E36A2A' : '#7A7388' ]]]"
                 - width: "16px"
                 - padding: "8px"
                 - border-radius: "50%"
-                - background: "[[[ return entity && entity.state === 'on' ? '#BFDDC4' : 'rgba(46,39,66,0.06)' ]]]"
+                - background: "[[[ return entity.state === 'on' ? '#F6B584' : 'rgba(46,39,66,0.06)' ]]]"
               name:
                 - font-size: "13px"
                 - font-weight: "700"
                 - color: "#2E2742"
                 - text-align: "left"
-                - margin-top: "10px"
+                - margin-top: "12px"
               label:
                 - font-size: "10px"
                 - color: "#7A7388"
                 - text-align: "left"
 
+          # AirFryer
           - type: custom:button-card
-            entity: switch.exaustor_cozinha
-            name: "Exaustor"
-            label: "[[[ return entity && entity.state === 'on' ? 'Vel 2' : 'Desligado' ]]]"
+            entity: switch.airfryer
+            name: "AirFryer"
+            label: "[[[ return entity.state === 'on' ? '180° · 12min' : 'Em espera' ]]]"
             show_label: true
-            icon: mdi:fan
+            icon: mdi:pot-steam-outline
             tap_action:
               action: toggle
-            custom_fields:
-              toggle_sw: >
-                [[[
-                  const on = entity && entity.state === 'on';
-                  return `<div style="width:44px;height:26px;border-radius:13px;background:${on?'#F08648':'#C8C0D0'};position:relative;"><div style="position:absolute;width:20px;height:20px;background:white;border-radius:50%;top:3px;${on?'right:3px':'left:3px'};box-shadow:0 1px 4px rgba(0,0,0,0.3);"></div></div>`;
-                ]]]
             styles:
-              grid:
-                - grid-template-areas: '"i toggle_sw" "n n" "l l"'
-                - grid-template-columns: "min-content 1fr"
-              custom_fields:
-                toggle_sw:
-                  - justify-self: "end"
-                  - align-self: "start"
               card:
-                - background: "[[[ return entity && entity.state === 'on' ? '#FFFFFF' : '#FBF6EC' ]]]"
+                - background: "[[[ return entity.state === 'on' ? '#FFFFFF' : '#FBF6EC' ]]]"
                 - border-radius: "20px"
                 - padding: "12px"
                 - box-shadow: "0 4px 12px rgba(46,39,66,0.06)"
                 - min-height: "108px"
               icon:
-                - color: "[[[ return entity && entity.state === 'on' ? '#9E8AC4' : '#7A7388' ]]]"
+                - color: "[[[ return entity.state === 'on' ? '#E36A2A' : '#7A7388' ]]]"
                 - width: "16px"
                 - padding: "8px"
                 - border-radius: "50%"
-                - background: "[[[ return entity && entity.state === 'on' ? '#D2C5E6' : 'rgba(46,39,66,0.06)' ]]]"
+                - background: "[[[ return entity.state === 'on' ? '#F6B584' : 'rgba(46,39,66,0.06)' ]]]"
               name:
                 - font-size: "13px"
                 - font-weight: "700"
                 - color: "#2E2742"
                 - text-align: "left"
-                - margin-top: "10px"
+                - margin-top: "12px"
               label:
                 - font-size: "10px"
                 - color: "#7A7388"
                 - text-align: "left"
 
+          # Panela de Pressão
           - type: custom:button-card
             entity: switch.panela_pressao
             name: "Panela Pressão"
-            label: "[[[ return entity && entity.state === 'on' ? 'Cozinhando' : 'Em espera' ]]]"
+            label: "[[[ return entity.state === 'on' ? 'Cozinhando' : 'Em espera' ]]]"
             show_label: true
             icon: mdi:pot-outline
             tap_action:
               action: toggle
-            custom_fields:
-              toggle_sw: >
-                [[[
-                  const on = entity && entity.state === 'on';
-                  return `<div style="width:44px;height:26px;border-radius:13px;background:${on?'#F08648':'#C8C0D0'};position:relative;"><div style="position:absolute;width:20px;height:20px;background:white;border-radius:50%;top:3px;${on?'right:3px':'left:3px'};box-shadow:0 1px 4px rgba(0,0,0,0.3);"></div></div>`;
-                ]]]
             styles:
-              grid:
-                - grid-template-areas: '"i toggle_sw" "n n" "l l"'
-                - grid-template-columns: "min-content 1fr"
-              custom_fields:
-                toggle_sw:
-                  - justify-self: "end"
-                  - align-self: "start"
               card:
-                - background: "[[[ return entity && entity.state === 'on' ? '#FFFFFF' : '#FBF6EC' ]]]"
+                - background: "[[[ return entity.state === 'on' ? '#FFFFFF' : '#FBF6EC' ]]]"
                 - border-radius: "20px"
                 - padding: "12px"
                 - box-shadow: "0 4px 12px rgba(46,39,66,0.06)"
                 - min-height: "108px"
               icon:
-                - color: "[[[ return entity && entity.state === 'on' ? '#F08648' : '#7A7388' ]]]"
+                - color: "[[[ return entity.state === 'on' ? '#F08648' : '#7A7388' ]]]"
                 - width: "16px"
                 - padding: "8px"
                 - border-radius: "50%"
-                - background: "[[[ return entity && entity.state === 'on' ? 'rgba(240,134,72,0.2)' : 'rgba(46,39,66,0.06)' ]]]"
+                - background: "[[[ return entity.state === 'on' ? 'rgba(240,134,72,0.2)' : 'rgba(46,39,66,0.06)' ]]]"
               name:
                 - font-size: "13px"
                 - font-weight: "700"
                 - color: "#2E2742"
                 - text-align: "left"
-                - margin-top: "10px"
+                - margin-top: "12px"
               label:
                 - font-size: "10px"
                 - color: "#7A7388"
                 - text-align: "left"
 
+          # Sanduicheira
           - type: custom:button-card
             entity: switch.sanduicheira
             name: "Sanduicheira"
-            label: "[[[ return entity && entity.state === 'on' ? 'Aquecendo' : 'Em espera' ]]]"
+            label: "[[[ return entity.state === 'on' ? 'Aquecendo' : 'Em espera' ]]]"
             show_label: true
             icon: mdi:toaster-oven
             tap_action:
               action: toggle
-            custom_fields:
-              toggle_sw: >
-                [[[
-                  const on = entity && entity.state === 'on';
-                  return `<div style="width:44px;height:26px;border-radius:13px;background:${on?'#F08648':'#C8C0D0'};position:relative;"><div style="position:absolute;width:20px;height:20px;background:white;border-radius:50%;top:3px;${on?'right:3px':'left:3px'};box-shadow:0 1px 4px rgba(0,0,0,0.3);"></div></div>`;
-                ]]]
             styles:
-              grid:
-                - grid-template-areas: '"i toggle_sw" "n n" "l l"'
-                - grid-template-columns: "min-content 1fr"
-              custom_fields:
-                toggle_sw:
-                  - justify-self: "end"
-                  - align-self: "start"
               card:
-                - background: "[[[ return entity && entity.state === 'on' ? '#FFFFFF' : '#FBF6EC' ]]]"
+                - background: "[[[ return entity.state === 'on' ? '#FFFFFF' : '#FBF6EC' ]]]"
                 - border-radius: "20px"
                 - padding: "12px"
                 - box-shadow: "0 4px 12px rgba(46,39,66,0.06)"
                 - min-height: "108px"
               icon:
-                - color: "[[[ return entity && entity.state === 'on' ? '#E5B7AC' : '#7A7388' ]]]"
+                - color: "[[[ return entity.state === 'on' ? '#E5B7AC' : '#7A7388' ]]]"
                 - width: "16px"
                 - padding: "8px"
                 - border-radius: "50%"
-                - background: "[[[ return entity && entity.state === 'on' ? '#F1DCD4' : 'rgba(46,39,66,0.06)' ]]]"
+                - background: "[[[ return entity.state === 'on' ? '#F1DCD4' : 'rgba(46,39,66,0.06)' ]]]"
               name:
                 - font-size: "13px"
                 - font-weight: "700"
                 - color: "#2E2742"
                 - text-align: "left"
-                - margin-top: "10px"
+                - margin-top: "12px"
               label:
                 - font-size: "10px"
                 - color: "#7A7388"
                 - text-align: "left"
+
+          # Liquidificador
+          - type: custom:button-card
+            entity: switch.liquidificador
+            name: "Liquidificador"
+            label: "[[[ return entity.state === 'on' ? 'Vel 3' : 'Em espera' ]]]"
+            show_label: true
+            icon: mdi:blender-outline
+            tap_action:
+              action: toggle
+            styles:
+              card:
+                - background: "[[[ return entity.state === 'on' ? '#FFFFFF' : '#FBF6EC' ]]]"
+                - border-radius: "20px"
+                - padding: "12px"
+                - box-shadow: "0 4px 12px rgba(46,39,66,0.06)"
+                - min-height: "108px"
+              icon:
+                - color: "[[[ return entity.state === 'on' ? '#7FB892' : '#7A7388' ]]]"
+                - width: "16px"
+                - padding: "8px"
+                - border-radius: "50%"
+                - background: "[[[ return entity.state === 'on' ? '#BFDDC4' : 'rgba(46,39,66,0.06)' ]]]"
+              name:
+                - font-size: "13px"
+                - font-weight: "700"
+                - color: "#2E2742"
+                - text-align: "left"
+                - margin-top: "12px"
+              label:
+                - font-size: "10px"
+                - color: "#7A7388"
+                - text-align: "left"
+
+          # Exaustor / Coifa
+          - type: custom:button-card
+            entity: switch.exaustor_cozinha
+            name: "Exaustor"
+            label: "[[[ return entity.state === 'on' ? 'Vel 2' : 'Desligado' ]]]"
+            show_label: true
+            icon: mdi:fan
+            tap_action:
+              action: toggle
+            styles:
+              card:
+                - background: "[[[ return entity.state === 'on' ? '#FFFFFF' : '#FBF6EC' ]]]"
+                - border-radius: "20px"
+                - padding: "12px"
+                - box-shadow: "0 4px 12px rgba(46,39,66,0.06)"
+                - min-height: "108px"
+              icon:
+                - color: "[[[ return entity.state === 'on' ? '#9E8AC4' : '#7A7388' ]]]"
+                - width: "16px"
+                - padding: "8px"
+                - border-radius: "50%"
+                - background: "[[[ return entity.state === 'on' ? '#D2C5E6' : 'rgba(46,39,66,0.06)' ]]]"
+              name:
+                - font-size: "13px"
+                - font-weight: "700"
+                - color: "#2E2742"
+                - text-align: "left"
+                - margin-top: "12px"
+              label:
+                - font-size: "10px"
+                - color: "#7A7388"
+                - text-align: "left"
+
+      # ── Consumo da Cozinha ──────────────────────────────────────────────────
+      - type: custom:mini-graph-card
+        entities:
+          - entity: sensor.cozinha_energia_total
+            name: "Cozinha"
+            color: "#F08648"
+        name: "Consumo da Cozinha"
+        hours_to_show: 24
+        points_per_hour: 2
+        line_width: 2
+        fill: fade
+        show:
+          state: true
+          labels: false
+          icon: false
+        card_mod:
+          style: |
+            ha-card {
+              background: #FFFFFF !important;
+              border-radius: 26px !important;
+              box-shadow: 0 8px 24px rgba(46,39,66,0.08) !important;
+              padding: 16px;
+            }
