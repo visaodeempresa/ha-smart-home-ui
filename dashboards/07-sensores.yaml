@@ -1,0 +1,368 @@
+# ══════════════════════════════════════════════════════════════════════════════
+# TELA 07 — SENSORES (Leitura em tempo real)
+# Design: grid de tiles ao vivo — temp, umidade, lux (wide), movimento (dark),
+#          ocupação, gráfico de área 24h de temperatura, card de automações
+# ══════════════════════════════════════════════════════════════════════════════
+# COMO USAR: adicione em `views:` do seu dashboard Lovelace
+# ENTIDADES: sensor.sala_temperatura, sensor.sala_umidade, sensor.sala_luminosidade,
+#            binary_sensor.sala_movimento, sensor.sala_ocupacao
+# ══════════════════════════════════════════════════════════════════════════════
+
+title: "📡 Sensores"
+path: sensores
+icon: mdi:chart-scatter-plot
+background: "#EFE7D8"
+cards:
+
+  # ── Cabeçalho ───────────────────────────────────────────────────────────
+  - type: custom:button-card
+    name: "Sensores"
+    label: "Em tempo real"
+    show_label: true
+    show_icon: false
+    styles:
+      card:
+        - background: "transparent"
+        - box-shadow: "none"
+        - padding: "20px 16px 8px"
+      name:
+        - font-size: "22px"
+        - font-weight: "700"
+        - color: "#2E2742"
+        - letter-spacing: "-0.02em"
+      label:
+        - font-size: "11px"
+        - color: "#7A7388"
+        - font-weight: "700"
+        - text-transform: "uppercase"
+        - letter-spacing: "0.06em"
+
+  # ── Grid de Sensores ─────────────────────────────────────────────────────
+  - type: grid
+    columns: 2
+    square: false
+    cards:
+
+      # Temperatura
+      - type: custom:button-card
+        entity: sensor.sala_temperatura
+        name: "Temperatura"
+        label: "[[[ const s = parseFloat(entity.state); return `${s > 22 ? '↑' : '↓'} 0.6° na última hora` ]]]"
+        show_label: true
+        icon: mdi:thermometer
+        styles:
+          card:
+            - background: "#FFFFFF"
+            - border-radius: "26px"
+            - padding: "14px"
+            - box-shadow: "0 8px 24px rgba(46,39,66,0.08)"
+            - min-height: "120px"
+            - overflow: "hidden"
+            - position: "relative"
+          icon:
+            - color: "#2E2742"
+            - width: "16px"
+            - padding: "8px"
+            - border-radius: "50%"
+            - background: "rgba(46,39,66,0.06)"
+          name:
+            - font-size: "28px"
+            - font-weight: "700"
+            - letter-spacing: "-0.02em"
+            - color: "#2E2742"
+            - margin-top: "14px"
+          label:
+            - font-size: "11px"
+            - color: "#7A7388"
+        state_display: "[[[ return entity.state + ' °C' ]]]"
+        card_mod:
+          style: |
+            ha-card::before {
+              content: 'TEMPERATURA';
+              position: absolute;
+              top: 14px;
+              left: 50px;
+              font-size: 9px;
+              font-weight: 700;
+              color: #7A7388;
+              letter-spacing: 0.06em;
+            }
+            ha-card::after {
+              content: '';
+              position: absolute;
+              top: -30px;
+              right: -30px;
+              width: 100px;
+              height: 100px;
+              border-radius: 50%;
+              background: #F1DCD4;
+              opacity: 0.6;
+            }
+
+      # Umidade
+      - type: custom:button-card
+        entity: sensor.sala_umidade
+        name: "Umidade"
+        label: "Confortável"
+        show_label: true
+        icon: mdi:water-percent
+        styles:
+          card:
+            - background: "#FFFFFF"
+            - border-radius: "26px"
+            - padding: "14px"
+            - box-shadow: "0 8px 24px rgba(46,39,66,0.08)"
+            - min-height: "120px"
+            - overflow: "hidden"
+            - position: "relative"
+          icon:
+            - color: "#7FB892"
+            - width: "16px"
+            - padding: "8px"
+            - border-radius: "50%"
+            - background: "rgba(46,39,66,0.06)"
+          name:
+            - font-size: "28px"
+            - font-weight: "700"
+            - letter-spacing: "-0.02em"
+            - color: "#2E2742"
+            - margin-top: "14px"
+          label:
+            - font-size: "11px"
+            - color: "#7A7388"
+        state_display: "[[[ return entity.state + ' %' ]]]"
+        card_mod:
+          style: |
+            ha-card::after {
+              content: '';
+              position: absolute;
+              top: -30px;
+              right: -30px;
+              width: 100px;
+              height: 100px;
+              border-radius: 50%;
+              background: #BFDDC4;
+              opacity: 0.6;
+            }
+
+      # Luminosidade (full width)
+      - type: custom:button-card
+        entity: sensor.sala_luminosidade
+        name: "Luminosidade"
+        label: "Crepúsculo · brando"
+        show_label: true
+        icon: mdi:brightness-5
+        styles:
+          card:
+            - background: "#FFFFFF"
+            - border-radius: "26px"
+            - padding: "14px"
+            - box-shadow: "0 8px 24px rgba(46,39,66,0.08)"
+            - min-height: "100px"
+            - overflow: "hidden"
+            - position: "relative"
+            - grid-column: "span 2"
+          icon:
+            - color: "#E36A2A"
+            - width: "16px"
+            - padding: "8px"
+            - border-radius: "50%"
+            - background: "rgba(46,39,66,0.06)"
+          name:
+            - font-size: "38px"
+            - font-weight: "700"
+            - letter-spacing: "-0.02em"
+            - color: "#2E2742"
+            - margin-top: "14px"
+          label:
+            - font-size: "11px"
+            - color: "#7A7388"
+        state_display: "[[[ return entity.state + ' lux' ]]]"
+        card_mod:
+          style: |
+            ha-card::after {
+              content: '';
+              position: absolute;
+              top: -30px;
+              right: -30px;
+              width: 100px;
+              height: 100px;
+              border-radius: 50%;
+              background: #F6B584;
+              opacity: 0.6;
+            }
+
+      # Movimento (dark)
+      - type: custom:button-card
+        entity: binary_sensor.sala_movimento
+        name: "Movimento"
+        label: "[[[ return entity.state === 'on' ? 'Detectado · sala' : 'Sem movimento' ]]]"
+        show_label: true
+        icon: mdi:motion-sensor
+        styles:
+          card:
+            - background: "#2E2742"
+            - border-radius: "26px"
+            - padding: "14px"
+            - box-shadow: "0 18px 40px rgba(20,15,35,0.35)"
+            - min-height: "120px"
+            - overflow: "hidden"
+            - position: "relative"
+          icon:
+            - color: "rgba(255,255,255,0.6)"
+            - width: "16px"
+            - padding: "8px"
+            - border-radius: "50%"
+            - background: "rgba(255,255,255,0.1)"
+          name:
+            - font-size: "28px"
+            - font-weight: "700"
+            - letter-spacing: "-0.02em"
+            - color: "#FFFFFF"
+            - margin-top: "14px"
+          label:
+            - font-size: "11px"
+            - color: "rgba(255,255,255,0.55)"
+        state_display: "[[[ return entity.state === 'on' ? '2s atrás' : 'Quieto' ]]]"
+        card_mod:
+          style: |
+            ha-card::after {
+              content: '';
+              position: absolute;
+              top: -30px;
+              right: -30px;
+              width: 100px;
+              height: 100px;
+              border-radius: 50%;
+              background: #D2C5E6;
+              opacity: 0.6;
+            }
+
+      # Ocupação / Presença
+      - type: custom:button-card
+        entity: sensor.sala_ocupacao
+        name: "Ocupação"
+        label: "Sala + Cozinha"
+        show_label: true
+        icon: mdi:account-group
+        styles:
+          card:
+            - background: "#FFFFFF"
+            - border-radius: "26px"
+            - padding: "14px"
+            - box-shadow: "0 8px 24px rgba(46,39,66,0.08)"
+            - min-height: "120px"
+            - overflow: "hidden"
+            - position: "relative"
+          icon:
+            - color: "#2E2742"
+            - width: "16px"
+            - padding: "8px"
+            - border-radius: "50%"
+            - background: "rgba(46,39,66,0.06)"
+          name:
+            - font-size: "28px"
+            - font-weight: "700"
+            - letter-spacing: "-0.02em"
+            - color: "#2E2742"
+            - margin-top: "14px"
+          label:
+            - font-size: "11px"
+            - color: "#7A7388"
+        state_display: "[[[ return entity.state + ' pessoas' ]]]"
+        card_mod:
+          style: |
+            ha-card::after {
+              content: '';
+              position: absolute;
+              top: -30px;
+              right: -30px;
+              width: 100px;
+              height: 100px;
+              border-radius: 50%;
+              background: #F6B584;
+              opacity: 0.6;
+            }
+
+  # ── Gráfico de Temperatura 24h ───────────────────────────────────────────
+  - type: custom:mini-graph-card
+    entity: sensor.sala_temperatura
+    name: "Temperatura 24h"
+    detail: 2
+    hours_to_show: 24
+    points_per_hour: 4
+    line_color: "#F08648"
+    line_width: 2
+    fill: fade
+    show:
+      state: true
+      extrema: true
+      labels: true
+      icon: false
+    card_mod:
+      style: |
+        ha-card {
+          background: #FFFFFF !important;
+          border-radius: 26px !important;
+          box-shadow: 0 8px 24px rgba(46,39,66,0.08) !important;
+          padding: 16px;
+        }
+
+  # ── Automações ativas respondendo a sensores ────────────────────────────
+  - type: custom:button-card
+    name: "3 automações ativas"
+    label: "Reagindo a movimento, luz e temperatura"
+    show_label: true
+    icon: mdi:robot-outline
+    tap_action:
+      action: navigate
+      navigation_path: /config/automation
+    styles:
+      card:
+        - background: "#2E2742"
+        - border-radius: "26px"
+        - padding: "16px"
+        - box-shadow: "0 16px 40px rgba(46,39,66,0.2)"
+      icon:
+        - color: "#FFFFFF"
+        - width: "18px"
+        - padding: "9px"
+        - border-radius: "50%"
+        - background: "#F08648"
+      name:
+        - font-size: "13px"
+        - font-weight: "700"
+        - color: "#FFFFFF"
+        - text-align: "left"
+        - margin-top: "4px"
+      label:
+        - font-size: "11px"
+        - color: "rgba(255,255,255,0.6)"
+        - text-align: "left"
+
+  # ── Sensor: Qualidade do Ar / CO2 ──────────────────────────────────────
+  - type: entities
+    title: "Sensores Ambientais"
+    entities:
+      - entity: sensor.sala_temperatura
+        name: "Temperatura"
+        icon: mdi:thermometer
+      - entity: sensor.sala_umidade
+        name: "Umidade"
+        icon: mdi:water-percent
+      - entity: sensor.sala_luminosidade
+        name: "Luminosidade"
+        icon: mdi:brightness-5
+      - entity: binary_sensor.sala_movimento
+        name: "Movimento"
+        icon: mdi:motion-sensor
+      - entity: sensor.sala_co2
+        name: "CO₂"
+        icon: mdi:molecule-co2
+    card_mod:
+      style: |
+        ha-card {
+          background: #FFFFFF !important;
+          border-radius: 26px !important;
+          box-shadow: 0 8px 24px rgba(46,39,66,0.08) !important;
+        }

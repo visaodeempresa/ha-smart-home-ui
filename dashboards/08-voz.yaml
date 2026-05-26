@@ -1,0 +1,271 @@
+# ══════════════════════════════════════════════════════════════════════════════
+# TELA 08 — ASSISTENTE DE VOZ (Alexa / HA Voice)
+# Design: fundo plum, orb com glow radial, waveform animado, transcript
+#         "Ouvindo...", switcher Alexa↔HA Voice, sugestões de comandos
+# ══════════════════════════════════════════════════════════════════════════════
+# COMO USAR: adicione em `views:` do seu dashboard Lovelace
+# DEPENDÊNCIAS: integração Amazon Alexa + HA Voice (Wyoming / Assist)
+# ══════════════════════════════════════════════════════════════════════════════
+
+title: "🎙️ Voz"
+path: voz
+icon: mdi:microphone
+background: "#2E2742"
+cards:
+
+  # ── Cabeçalho ───────────────────────────────────────────────────────────
+  - type: custom:button-card
+    name: "Assistente de Voz"
+    label: "Sala principal"
+    show_label: true
+    show_icon: false
+    styles:
+      card:
+        - background: "transparent"
+        - box-shadow: "none"
+        - padding: "20px 16px 8px"
+      name:
+        - font-size: "18px"
+        - font-weight: "700"
+        - color: "#FFFFFF"
+      label:
+        - font-size: "11px"
+        - color: "rgba(255,255,255,0.55)"
+        - font-weight: "600"
+        - text-transform: "uppercase"
+        - letter-spacing: "0.06em"
+
+  # ── Assistente HA Voice (Assist) ────────────────────────────────────────
+  - type: assist_satellite
+    entity: assist_satellite.nabu_casa_sala
+    card_mod:
+      style: |
+        ha-card {
+          background: rgba(255,255,255,0.06) !important;
+          border-radius: 32px !important;
+          box-shadow: none !important;
+          backdrop-filter: blur(20px);
+          color: #fff !important;
+        }
+        ha-card * {
+          color: #fff;
+        }
+
+  # ── Alexa (media player com wake word control) ───────────────────────────
+  - type: custom:button-card
+    entity: media_player.alexa_sala
+    name: "Amazon Alexa"
+    label: "[[[ return entity.state === 'on' ? 'Ouvindo...' : 'Em espera' ]]]"
+    show_label: true
+    icon: mdi:amazon-alexa
+    tap_action:
+      action: more-info
+    styles:
+      card:
+        - background: "rgba(210,197,230,0.15)"
+        - border-radius: "26px"
+        - padding: "20px"
+        - box-shadow: "none"
+        - backdrop-filter: "blur(20px)"
+      icon:
+        - color: "#FFFFFF"
+        - width: "32px"
+        - padding: "20px"
+        - border-radius: "50%"
+        - background: "rgba(210,197,230,0.3)"
+        - box-shadow: "0 0 60px rgba(210,197,230,0.4)"
+      name:
+        - font-size: "18px"
+        - font-weight: "700"
+        - color: "#FFFFFF"
+        - margin-top: "16px"
+      label:
+        - font-size: "12px"
+        - color: "rgba(255,255,255,0.55)"
+
+  # ── HA Voice (Nabu Casa / Wyoming) ────────────────────────────────────
+  - type: custom:button-card
+    entity: media_player.ha_voice_sala
+    name: "HA Voice"
+    label: "[[[ return entity.state === 'on' ? 'Ouvindo...' : 'Em espera' ]]]"
+    show_label: true
+    icon: mdi:home-assistant
+    tap_action:
+      action: more-info
+    styles:
+      card:
+        - background: "rgba(191,221,196,0.15)"
+        - border-radius: "26px"
+        - padding: "20px"
+        - box-shadow: "none"
+        - backdrop-filter: "blur(20px)"
+      icon:
+        - color: "#FFFFFF"
+        - width: "32px"
+        - padding: "20px"
+        - border-radius: "50%"
+        - background: "rgba(191,221,196,0.3)"
+        - box-shadow: "0 0 60px rgba(191,221,196,0.4)"
+      name:
+        - font-size: "18px"
+        - font-weight: "700"
+        - color: "#FFFFFF"
+        - margin-top: "16px"
+      label:
+        - font-size: "12px"
+        - color: "rgba(255,255,255,0.55)"
+
+  # ── Botão: Iniciar Assist ───────────────────────────────────────────────
+  - type: custom:button-card
+    name: "Abrir Assistente"
+    icon: mdi:microphone
+    tap_action:
+      action: assist
+    styles:
+      card:
+        - background: "#7FB892"
+        - border-radius: "999px"
+        - padding: "16px"
+        - box-shadow: "0 8px 32px rgba(127,184,146,0.4)"
+      icon:
+        - color: "#FFFFFF"
+        - width: "24px"
+      name:
+        - font-size: "14px"
+        - font-weight: "700"
+        - color: "#FFFFFF"
+
+  # ── Sugestões de comandos ───────────────────────────────────────────────
+  - type: custom:button-card
+    name: "Sugestões"
+    show_icon: false
+    styles:
+      card:
+        - background: "transparent"
+        - box-shadow: "none"
+        - padding: "8px 4px 4px"
+      name:
+        - font-size: "11px"
+        - font-weight: "700"
+        - color: "rgba(255,255,255,0.5)"
+        - text-transform: "uppercase"
+        - letter-spacing: "0.06em"
+        - text-align: "left"
+
+  - type: entities
+    entities:
+      - type: custom:button-card
+        name: "\"Tocar lo-fi na sala\""
+        icon: mdi:music
+        tap_action:
+          action: call-service
+          service: media_player.play_media
+          service_data:
+            entity_id: media_player.sala
+            media_content_type: music
+            media_content_id: "lofi"
+        styles:
+          card:
+            - background: "rgba(255,255,255,0.06)"
+            - border-radius: "20px"
+            - padding: "12px 14px"
+            - box-shadow: "none"
+            - margin-bottom: "8px"
+          icon:
+            - color: "#7FB892"
+            - width: "14px"
+          name:
+            - font-size: "13px"
+            - font-weight: "500"
+            - color: "rgba(255,255,255,0.85)"
+            - text-align: "left"
+
+      - type: custom:button-card
+        name: "\"Ajustar termostato para 22°\""
+        icon: mdi:thermometer
+        tap_action:
+          action: call-service
+          service: climate.set_temperature
+          service_data:
+            entity_id: climate.sala_ac
+            temperature: 22
+        styles:
+          card:
+            - background: "rgba(255,255,255,0.06)"
+            - border-radius: "20px"
+            - padding: "12px 14px"
+            - box-shadow: "none"
+            - margin-bottom: "8px"
+          icon:
+            - color: "#7FB892"
+            - width: "14px"
+          name:
+            - font-size: "13px"
+            - font-weight: "500"
+            - color: "rgba(255,255,255,0.85)"
+            - text-align: "left"
+
+      - type: custom:button-card
+        name: "\"Iniciar rotina Boa Noite\""
+        icon: mdi:weather-night
+        tap_action:
+          action: call-service
+          service: scene.turn_on
+          target:
+            entity_id: scene.boa_noite
+        styles:
+          card:
+            - background: "rgba(255,255,255,0.06)"
+            - border-radius: "20px"
+            - padding: "12px 14px"
+            - box-shadow: "none"
+            - margin-bottom: "8px"
+          icon:
+            - color: "#7FB892"
+            - width: "14px"
+          name:
+            - font-size: "13px"
+            - font-weight: "500"
+            - color: "rgba(255,255,255,0.85)"
+            - text-align: "left"
+
+      - type: custom:button-card
+        name: "\"Está chovendo amanhã?\""
+        icon: mdi:weather-rainy
+        tap_action:
+          action: more-info
+          entity: weather.casa
+        styles:
+          card:
+            - background: "rgba(255,255,255,0.06)"
+            - border-radius: "20px"
+            - padding: "12px 14px"
+            - box-shadow: "none"
+          icon:
+            - color: "#7FB892"
+            - width: "14px"
+          name:
+            - font-size: "13px"
+            - font-weight: "500"
+            - color: "rgba(255,255,255,0.85)"
+            - text-align: "left"
+    card_mod:
+      style: |
+        ha-card {
+          background: transparent !important;
+          box-shadow: none !important;
+        }
+
+  # ── Histórico de conversas (últimos comandos) ───────────────────────────
+  - type: logbook
+    entity: assist_satellite.nabu_casa_sala
+    hours_to_show: 6
+    card_mod:
+      style: |
+        ha-card {
+          background: rgba(255,255,255,0.06) !important;
+          border-radius: 26px !important;
+          box-shadow: none !important;
+          backdrop-filter: blur(20px);
+          color: rgba(255,255,255,0.8) !important;
+        }

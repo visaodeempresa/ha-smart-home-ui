@@ -1,0 +1,290 @@
+# ══════════════════════════════════════════════════════════════════════════════
+# TELA 06 — ACESSOS (Cortinas / Janelas / Portas)
+# Design: card hero de cortinas com visualização animada + slider,
+#          presets fechar/meio/abrir, card escuro de porta (lock + toggle),
+#          card de janela com slider, atalho "Fechar tudo / Abrir dia"
+# ══════════════════════════════════════════════════════════════════════════════
+# COMO USAR: adicione em `views:` do seu dashboard Lovelace
+# ENTIDADES: cover.sala_cortinas, lock.porta_entrada, cover.cozinha_janela
+# ══════════════════════════════════════════════════════════════════════════════
+
+title: "🚪 Acessos"
+path: acessos
+icon: mdi:door-open
+background: "#EFE7D8"
+cards:
+
+  # ── Cabeçalho ───────────────────────────────────────────────────────────
+  - type: custom:button-card
+    name: "Acessos"
+    label: "Sala · Aberturas"
+    show_label: true
+    show_icon: false
+    styles:
+      card:
+        - background: "transparent"
+        - box-shadow: "none"
+        - padding: "20px 16px 8px"
+      name:
+        - font-size: "16px"
+        - font-weight: "700"
+        - color: "#2E2742"
+      label:
+        - font-size: "11px"
+        - color: "#7A7388"
+        - font-weight: "600"
+        - text-transform: "uppercase"
+        - letter-spacing: "0.06em"
+
+  # ── Card Hero: Cortinas ─────────────────────────────────────────────────
+  - type: cover
+    entity: cover.sala_cortinas
+    card_mod:
+      style: |
+        ha-card {
+          background: #FFFFFF !important;
+          border-radius: 32px !important;
+          box-shadow: 0 16px 40px rgba(46,39,66,0.10) !important;
+          padding: 18px;
+          overflow: hidden;
+        }
+        .card-content {
+          padding: 0 !important;
+        }
+
+  # ── Presets de Cortinas ─────────────────────────────────────────────────
+  - type: horizontal-stack
+    cards:
+      - type: custom:button-card
+        name: "Fechar"
+        icon: mdi:curtains-closed
+        tap_action:
+          action: call-service
+          service: cover.close_cover
+          target:
+            entity_id: cover.sala_cortinas
+        styles:
+          card:
+            - background: "#2E2742"
+            - border-radius: "999px"
+            - padding: "12px 0"
+            - box-shadow: "0 4px 12px rgba(46,39,66,0.2)"
+          icon:
+            - color: "#FFFFFF"
+            - width: "16px"
+          name:
+            - font-size: "12px"
+            - font-weight: "700"
+            - color: "#FFFFFF"
+
+      - type: custom:button-card
+        name: "Meio"
+        icon: mdi:curtains
+        tap_action:
+          action: call-service
+          service: cover.set_cover_position
+          service_data:
+            entity_id: cover.sala_cortinas
+            position: 50
+        styles:
+          card:
+            - background: "#EFE7D8"
+            - border-radius: "999px"
+            - padding: "12px 0"
+            - box-shadow: "0 4px 12px rgba(46,39,66,0.06)"
+          icon:
+            - color: "#2E2742"
+            - width: "16px"
+          name:
+            - font-size: "12px"
+            - font-weight: "700"
+            - color: "#2E2742"
+
+      - type: custom:button-card
+        name: "Abrir"
+        icon: mdi:curtains
+        tap_action:
+          action: call-service
+          service: cover.open_cover
+          target:
+            entity_id: cover.sala_cortinas
+        styles:
+          card:
+            - background: "#EFE7D8"
+            - border-radius: "999px"
+            - padding: "12px 0"
+            - box-shadow: "0 4px 12px rgba(46,39,66,0.06)"
+          icon:
+            - color: "#2E2742"
+            - width: "16px"
+          name:
+            - font-size: "12px"
+            - font-weight: "700"
+            - color: "#2E2742"
+
+  # ── Porta + Janela (grid 2 colunas) ────────────────────────────────────
+  - type: grid
+    columns: 2
+    square: false
+    cards:
+      # Porta / Fechadura
+      - type: custom:button-card
+        entity: lock.porta_entrada
+        name: "Porta Entrada"
+        label: "[[[ return entity.state === 'locked' ? 'Trancada · 14:22' : 'Destrancada' ]]]"
+        show_label: true
+        icon: "[[[ return entity.state === 'locked' ? 'mdi:lock' : 'mdi:lock-open' ]]]"
+        tap_action:
+          action: toggle
+        styles:
+          card:
+            - background: "[[[ return entity.state === 'locked' ? '#2E2742' : '#FFFFFF' ]]]"
+            - border-radius: "26px"
+            - padding: "14px"
+            - box-shadow: "[[[ return entity.state === 'locked' ? '0 18px 40px rgba(20,15,35,0.35)' : '0 8px 24px rgba(46,39,66,0.08)' ]]]"
+            - min-height: "200px"
+            - display: "flex"
+            - flex-direction: "column"
+            - justify-content: "space-between"
+            - transition: "all 0.3s"
+          icon:
+            - color: "[[[ return entity.state === 'locked' ? '#FFFFFF' : '#2E2742' ]]]"
+            - width: "20px"
+            - padding: "9px"
+            - border-radius: "50%"
+            - background: "[[[ return entity.state === 'locked' ? 'rgba(255,255,255,0.12)' : '#F1DCD4' ]]]"
+          name:
+            - font-size: "14px"
+            - font-weight: "700"
+            - color: "[[[ return entity.state === 'locked' ? '#FFFFFF' : '#2E2742' ]]]"
+            - text-align: "left"
+            - margin-top: "18px"
+          label:
+            - font-size: "11px"
+            - color: "[[[ return entity.state === 'locked' ? 'rgba(255,255,255,0.55)' : '#7A7388' ]]]"
+            - text-align: "left"
+            - margin-top: "2px"
+
+      # Janela
+      - type: custom:button-card
+        entity: cover.cozinha_janela
+        name: "Janela Cozinha"
+        label: "[[[ const pos = entity.attributes.current_position; return pos > 0 ? `Aberta ${pos}%` : 'Fechada' ]]]"
+        show_label: true
+        icon: mdi:window-open
+        tap_action:
+          action: more-info
+        styles:
+          card:
+            - background: "#FFFFFF"
+            - border-radius: "26px"
+            - padding: "14px"
+            - box-shadow: "0 8px 24px rgba(46,39,66,0.08)"
+            - min-height: "200px"
+          icon:
+            - color: "#2E2742"
+            - width: "20px"
+            - padding: "9px"
+            - border-radius: "50%"
+            - background: "#BFDDC4"
+          name:
+            - font-size: "14px"
+            - font-weight: "700"
+            - color: "#2E2742"
+            - text-align: "left"
+            - margin-top: "18px"
+          label:
+            - font-size: "11px"
+            - color: "#7A7388"
+            - text-align: "left"
+
+  # ── Janela — controle de posição ───────────────────────────────────────
+  - type: cover
+    entity: cover.cozinha_janela
+    card_mod:
+      style: |
+        ha-card {
+          background: #FFFFFF !important;
+          border-radius: 26px !important;
+          box-shadow: 0 8px 24px rgba(46,39,66,0.08) !important;
+        }
+
+  # ── Atalho: Fechar Tudo / Abrir Dia ────────────────────────────────────
+  - type: custom:button-card
+    name: "Controle Geral de Aberturas"
+    show_icon: false
+    styles:
+      card:
+        - background: "transparent"
+        - box-shadow: "none"
+        - padding: "8px 4px 4px"
+      name:
+        - font-size: "11px"
+        - font-weight: "700"
+        - color: "#7A7388"
+        - text-transform: "uppercase"
+        - letter-spacing: "0.06em"
+        - text-align: "left"
+
+  - type: horizontal-stack
+    cards:
+      - type: custom:button-card
+        name: "Fechar tudo"
+        icon: mdi:home-lock
+        tap_action:
+          action: call-service
+          service: script.fechar_todas_aberturas
+        styles:
+          card:
+            - background: "#2E2742"
+            - border-radius: "20px"
+            - padding: "14px"
+            - box-shadow: "0 8px 24px rgba(46,39,66,0.2)"
+          icon:
+            - color: "#FFFFFF"
+            - width: "18px"
+          name:
+            - font-size: "12px"
+            - font-weight: "700"
+            - color: "#FFFFFF"
+
+      - type: custom:button-card
+        name: "Abrir dia"
+        icon: mdi:weather-sunny
+        tap_action:
+          action: call-service
+          service: script.abrir_aberturas_dia
+        styles:
+          card:
+            - background: "#F08648"
+            - border-radius: "20px"
+            - padding: "14px"
+            - box-shadow: "0 8px 24px rgba(240,134,72,0.3)"
+          icon:
+            - color: "#FFFFFF"
+            - width: "18px"
+          name:
+            - font-size: "12px"
+            - font-weight: "700"
+            - color: "#FFFFFF"
+
+  # ── Status de todas as aberturas ───────────────────────────────────────
+  - type: entities
+    title: "Status de Aberturas"
+    entities:
+      - entity: cover.sala_cortinas
+        name: "Cortinas — Sala"
+      - entity: cover.cozinha_janela
+        name: "Janela — Cozinha"
+      - entity: lock.porta_entrada
+        name: "Porta — Entrada"
+      - entity: lock.porta_garagem
+        name: "Porta — Garagem"
+        icon: mdi:garage
+    card_mod:
+      style: |
+        ha-card {
+          background: #FFFFFF !important;
+          border-radius: 26px !important;
+          box-shadow: 0 8px 24px rgba(46,39,66,0.08) !important;
+        }

@@ -1,0 +1,315 @@
+# ══════════════════════════════════════════════════════════════════════════════
+# TELA 02 — CONTROLE DE LUZ
+# Design: nome da luminária, visual de brilho (círculo halo), slider de brilho,
+#          temperatura de cor (quente↔frio), uso de energia, presets
+# ══════════════════════════════════════════════════════════════════════════════
+# COMO USAR: adicione em `views:` do seu dashboard Lovelace
+# ENTIDADE:  substitua `light.sala_pendente_norte` pela sua
+# ══════════════════════════════════════════════════════════════════════════════
+
+title: "💡 Luz"
+path: luz
+icon: mdi:lightbulb-outline
+background: "#EFE7D8"
+cards:
+
+  # ── Cabeçalho com nome da luminária ────────────────────────────────────
+  - type: custom:button-card
+    entity: light.sala_pendente_norte
+    name: "Pendente Norte"
+    label: "Sala · Luminária"
+    show_label: true
+    icon: mdi:arrow-left
+    tap_action:
+      action: navigate
+      navigation_path: /lovelace/dashboard
+    styles:
+      card:
+        - background: "transparent"
+        - box-shadow: "none"
+        - padding: "16px 16px 8px"
+        - flex-direction: "row"
+        - justify-content: "space-between"
+      icon:
+        - color: "#2E2742"
+        - width: "20px"
+        - background: "#FFFFFF"
+        - padding: "10px"
+        - border-radius: "50%"
+        - box-shadow: "0 4px 12px rgba(46,39,66,0.08)"
+      name:
+        - font-size: "16px"
+        - font-weight: "700"
+        - color: "#2E2742"
+      label:
+        - font-size: "11px"
+        - color: "#7A7388"
+        - font-weight: "600"
+        - text-transform: "uppercase"
+        - letter-spacing: "0.06em"
+
+  # ── Controle de Brilho (slider nativo HA) ──────────────────────────────
+  - type: light
+    entity: light.sala_pendente_norte
+    card_mod:
+      style: |
+        ha-card {
+          background: #FFFFFF;
+          border-radius: 32px;
+          box-shadow: 0 16px 40px rgba(46,39,66,0.10);
+          padding: 20px;
+        }
+
+  # ── Temperatura de Cor ─────────────────────────────────────────────────
+  - type: custom:button-card
+    entity: light.sala_pendente_norte
+    name: "Temperatura de Cor"
+    label: "[[[ if (!entity.attributes.color_temp_kelvin) return '—'; return entity.attributes.color_temp_kelvin + ' K'; ]]]"
+    show_label: true
+    show_icon: false
+    tap_action:
+      action: more-info
+    styles:
+      card:
+        - background: "#FFFFFF"
+        - border-radius: "26px"
+        - padding: "16px"
+        - box-shadow: "0 8px 24px rgba(46,39,66,0.08)"
+      name:
+        - font-size: "11px"
+        - font-weight: "700"
+        - color: "#7A7388"
+        - text-transform: "uppercase"
+        - letter-spacing: "0.06em"
+        - text-align: "left"
+      label:
+        - font-size: "18px"
+        - font-weight: "700"
+        - color: "#2E2742"
+        - text-align: "left"
+    card_mod:
+      style: |
+        ha-card::after {
+          content: '';
+          display: block;
+          height: 14px;
+          border-radius: 999px;
+          background: linear-gradient(90deg, #FFB870 0%, #FFE7C2 50%, #E4F0FF 100%);
+          margin-top: 12px;
+        }
+
+  # ── Informação de Uso (em linha) ────────────────────────────────────────
+  - type: horizontal-stack
+    cards:
+      - type: custom:button-card
+        entity: sensor.sala_pendente_energia_hoje
+        name: "Uso hoje"
+        label: "kWh consumidos"
+        show_label: true
+        icon: mdi:clock-outline
+        styles:
+          card:
+            - background: "#2E2742"
+            - border-radius: "20px"
+            - padding: "14px"
+            - box-shadow: "0 8px 24px rgba(46,39,66,0.2)"
+          icon:
+            - color: "rgba(255,255,255,0.5)"
+            - width: "14px"
+          name:
+            - font-size: "20px"
+            - font-weight: "700"
+            - color: "#FFFFFF"
+          label:
+            - font-size: "11px"
+            - color: "#F08648"
+            - font-weight: "600"
+
+      - type: custom:button-card
+        entity: light.sala_pendente_norte
+        name: "[[[ return entity.state === 'on' ? 'Ligada' : 'Desligada' ]]]"
+        label: "Energia"
+        show_label: true
+        icon: "[[[ return entity.state === 'on' ? 'mdi:power' : 'mdi:power-off' ]]]"
+        tap_action:
+          action: toggle
+        styles:
+          card:
+            - background: "#FFFFFF"
+            - border-radius: "20px"
+            - padding: "14px"
+            - box-shadow: "0 8px 24px rgba(46,39,66,0.08)"
+          icon:
+            - color: "[[[ return entity.state === 'on' ? '#F08648' : '#7A7388' ]]]"
+            - width: "20px"
+          name:
+            - font-size: "18px"
+            - font-weight: "700"
+            - color: "#2E2742"
+          label:
+            - font-size: "11px"
+            - color: "#7A7388"
+            - text-transform: "uppercase"
+            - letter-spacing: "0.06em"
+            - font-weight: "600"
+
+  # ── Presets ────────────────────────────────────────────────────────────
+  - type: custom:button-card
+    name: "PRESETS"
+    show_icon: false
+    styles:
+      card:
+        - background: "transparent"
+        - box-shadow: "none"
+        - padding: "8px 4px 0"
+      name:
+        - font-size: "11px"
+        - font-weight: "700"
+        - color: "#7A7388"
+        - letter-spacing: "0.06em"
+        - text-transform: "uppercase"
+        - text-align: "left"
+
+  - type: horizontal-stack
+    cards:
+      - type: custom:button-card
+        name: "Leitura"
+        icon: mdi:book-open-variant
+        tap_action:
+          action: call-service
+          service: scene.turn_on
+          target:
+            entity_id: scene.luz_leitura
+        styles:
+          card:
+            - background: "#FFFFFF"
+            - border-radius: "20px"
+            - padding: "12px 10px"
+            - box-shadow: "0 4px 12px rgba(46,39,66,0.06)"
+            - min-height: "70px"
+          icon:
+            - color: "#E36A2A"
+            - width: "18px"
+            - padding: "7px"
+            - border-radius: "50%"
+            - background: "#F6B584"
+          name:
+            - font-size: "12px"
+            - font-weight: "700"
+            - color: "#2E2742"
+            - margin-top: "8px"
+
+      - type: custom:button-card
+        name: "Cinema"
+        icon: mdi:movie-outline
+        tap_action:
+          action: call-service
+          service: scene.turn_on
+          target:
+            entity_id: scene.luz_cinema
+        styles:
+          card:
+            - background: "#FFFFFF"
+            - border-radius: "20px"
+            - padding: "12px 10px"
+            - box-shadow: "0 4px 12px rgba(46,39,66,0.06)"
+            - min-height: "70px"
+          icon:
+            - color: "#9E8AC4"
+            - width: "18px"
+            - padding: "7px"
+            - border-radius: "50%"
+            - background: "#D2C5E6"
+          name:
+            - font-size: "12px"
+            - font-weight: "700"
+            - color: "#2E2742"
+            - margin-top: "8px"
+
+      - type: custom:button-card
+        name: "Foco"
+        icon: mdi:head-flash-outline
+        tap_action:
+          action: call-service
+          service: scene.turn_on
+          target:
+            entity_id: scene.luz_foco
+        styles:
+          card:
+            - background: "#FFFFFF"
+            - border-radius: "20px"
+            - padding: "12px 10px"
+            - box-shadow: "0 4px 12px rgba(46,39,66,0.06)"
+            - min-height: "70px"
+          icon:
+            - color: "#7FB892"
+            - width: "18px"
+            - padding: "7px"
+            - border-radius: "50%"
+            - background: "#BFDDC4"
+          name:
+            - font-size: "12px"
+            - font-weight: "700"
+            - color: "#2E2742"
+            - margin-top: "8px"
+
+      - type: custom:button-card
+        name: "Jantar"
+        icon: mdi:candle
+        tap_action:
+          action: call-service
+          service: scene.turn_on
+          target:
+            entity_id: scene.luz_jantar
+        styles:
+          card:
+            - background: "#FFFFFF"
+            - border-radius: "20px"
+            - padding: "12px 10px"
+            - box-shadow: "0 4px 12px rgba(46,39,66,0.06)"
+            - min-height: "70px"
+          icon:
+            - color: "#E5B7AC"
+            - width: "18px"
+            - padding: "7px"
+            - border-radius: "50%"
+            - background: "#F1DCD4"
+          name:
+            - font-size: "12px"
+            - font-weight: "700"
+            - color: "#2E2742"
+            - margin-top: "8px"
+
+  # ── Fita LED (entidade separada) ───────────────────────────────────────
+  - type: custom:button-card
+    entity: light.sala_fita_led
+    name: "Fita LED — Sala"
+    label: "[[[ return entity.state === 'on' ? `Ligada · ${entity.attributes.brightness ? Math.round(entity.attributes.brightness/2.55) + '%' : ''}` : 'Desligada' ]]]"
+    show_label: true
+    icon: mdi:led-strip-variant
+    tap_action:
+      action: toggle
+    hold_action:
+      action: more-info
+    styles:
+      card:
+        - background: "[[[ return entity.state === 'on' ? '#FFFFFF' : '#FBF6EC' ]]]"
+        - border-radius: "26px"
+        - padding: "16px"
+        - box-shadow: "0 8px 24px rgba(46,39,66,0.08)"
+      icon:
+        - color: "[[[ return entity.state === 'on' ? '#F08648' : '#7A7388' ]]]"
+        - width: "22px"
+        - padding: "9px"
+        - border-radius: "50%"
+        - background: "[[[ return entity.state === 'on' ? '#F6B584' : 'rgba(46,39,66,0.06)' ]]]"
+      name:
+        - font-size: "14px"
+        - font-weight: "700"
+        - color: "#2E2742"
+        - text-align: "left"
+        - margin-top: "4px"
+      label:
+        - font-size: "11px"
+        - color: "#7A7388"
+        - text-align: "left"

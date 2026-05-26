@@ -1,0 +1,72 @@
+Smart Home Cream:
+  # ── Backgrounds ──────────────────────────────────────────────
+  primary-background-color: "#EFE7D8"
+  secondary-background-color: "#E9DFCB"
+  card-background-color: "#FFFFFF"
+  ha-card-background: "#FFFFFF"
+  ha-card-border-radius: "26px"
+  ha-card-box-shadow: "0 8px 24px rgba(46,39,66,0.08), 0 2px 6px rgba(46,39,66,0.04)"
+
+  # ── Text ─────────────────────────────────────────────────────
+  primary-text-color: "#2E2742"
+  secondary-text-color: "#7A7388"
+  disabled-text-color: "#B6B0C2"
+  text-primary-color: "#2E2742"
+
+  # ── Accent / Primary ─────────────────────────────────────────
+  primary-color: "#F08648"
+  accent-color: "#F08648"
+  dark-primary-color: "#E36A2A"
+  light-primary-color: "#F6B584"
+
+  # ── Nav Bar ──────────────────────────────────────────────────
+  app-header-background-color: "#2E2742"
+  app-header-text-color: "#FFFFFF"
+  app-header-selection-bar-color: "#F08648"
+
+  # ── Sidebar ──────────────────────────────────────────────────
+  sidebar-background-color: "#2E2742"
+  sidebar-text-color: "#FFFFFF"
+  sidebar-icon-color: "rgba(255,255,255,0.55)"
+  sidebar-selected-icon-color: "#F08648"
+  sidebar-selected-text-color: "#F08648"
+
+  # ── States ───────────────────────────────────────────────────
+  state-active-color: "#F08648"
+  state-inactive-color: "#B6B0C2"
+  state-on-color: "#F08648"
+  state-off-color: "#7A7388"
+  state-unavailable-color: "#B6B0C2"
+
+  # ── Sliders ──────────────────────────────────────────────────
+  paper-slider-active-color: "#F08648"
+  paper-slider-container-color: "rgba(46,39,66,0.1)"
+  paper-slider-knob-color: "#2E2742"
+
+  # ── Switches / Toggles ───────────────────────────────────────
+  switch-checked-color: "#F08648"
+  switch-checked-button-color: "#FFFFFF"
+  switch-unchecked-color: "rgba(46,39,66,0.2)"
+
+  # ── Dividers ─────────────────────────────────────────────────
+  divider-color: "rgba(46,39,66,0.08)"
+
+  # ── Custom vars (usados nos templates) ───────────────────────
+  --sh-plum: "#2E2742"
+  --sh-orange: "#F08648"
+  --sh-orange-deep: "#E36A2A"
+  --sh-peach: "#F6B584"
+  --sh-mint: "#BFDDC4"
+  --sh-mint-deep: "#7FB892"
+  --sh-lavender: "#D2C5E6"
+  --sh-lav-deep: "#9E8AC4"
+  --sh-blush: "#F1DCD4"
+  --sh-blush-deep: "#E5B7AC"
+  --sh-cream: "#EFE7D8"
+  --sh-card-soft: "#FBF6EC"
+  --sh-text-mute: "#7A7388"
+  --sh-font: '"Inter", -apple-system, system-ui, sans-serif'
+  --sh-radius-xl: "32px"
+  --sh-radius-lg: "26px"
+  --sh-radius-md: "20px"
+  --sh-radius-sm: "14px"

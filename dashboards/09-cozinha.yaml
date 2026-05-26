@@ -1,0 +1,410 @@
+# ══════════════════════════════════════════════════════════════════════════════
+# TELA 09 — COZINHA (Eletrodomésticos Inteligentes)
+# Design: card hero "Café da manhã" (blob laranja + cafeteira gigante),
+#          grid 2×4 de eletrodomésticos com os 3 estados (on/off/inativo)
+# ══════════════════════════════════════════════════════════════════════════════
+# COMO USAR: adicione em `views:` do seu dashboard Lovelace
+# ENTIDADES: switch/sensor para cada eletrodoméstico smart
+# ══════════════════════════════════════════════════════════════════════════════
+
+title: "🍳 Cozinha"
+path: cozinha
+icon: mdi:chef-hat
+background: "#EFE7D8"
+cards:
+
+  # ── Cabeçalho ───────────────────────────────────────────────────────────
+  - type: custom:button-card
+    name: "Cozinha"
+    label: "Cômodo"
+    show_label: true
+    show_icon: false
+    styles:
+      card:
+        - background: "transparent"
+        - box-shadow: "none"
+        - padding: "20px 16px 8px"
+      name:
+        - font-size: "24px"
+        - font-weight: "700"
+        - letter-spacing: "-0.02em"
+        - color: "#2E2742"
+        - text-align: "left"
+      label:
+        - font-size: "11px"
+        - color: "#7A7388"
+        - font-weight: "600"
+        - text-transform: "uppercase"
+        - letter-spacing: "0.06em"
+        - text-align: "left"
+
+  # ── Card Hero: Em uso agora ──────────────────────────────────────────────
+  - type: custom:button-card
+    entity: switch.cafeteira
+    name: "Café da manhã"
+    label: "Cafeteira + AirFryer ativos"
+    show_label: true
+    icon: mdi:coffee
+    tap_action:
+      action: more-info
+    styles:
+      card:
+        - background: "#FFFFFF"
+        - border-radius: "32px"
+        - padding: "0"
+        - box-shadow: "0 16px 40px rgba(46,39,66,0.10)"
+        - overflow: "hidden"
+        - position: "relative"
+        - min-height: "130px"
+      icon:
+        - color: "#FFFFFF"
+        - width: "36px"
+        - position: "absolute"
+        - right: "22px"
+        - top: "24px"
+        - z-index: "1"
+      name:
+        - font-size: "20px"
+        - font-weight: "700"
+        - letter-spacing: "-0.02em"
+        - color: "#2E2742"
+        - text-align: "left"
+        - padding: "18px 0 0 20px"
+      label:
+        - font-size: "11px"
+        - color: "#7A7388"
+        - text-align: "left"
+        - padding-left: "20px"
+    card_mod:
+      style: |
+        ha-card::before {
+          content: 'EM USO';
+          position: absolute;
+          top: 18px;
+          left: 20px;
+          font-size: 10px;
+          font-weight: 700;
+          color: #E36A2A;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+        }
+        ha-card::after {
+          content: '';
+          position: absolute;
+          top: -10px;
+          right: -30px;
+          width: 130px;
+          height: 130px;
+          border-radius: 50%;
+          background: #F08648;
+          z-index: 0;
+        }
+
+  # ── Título da seção ────────────────────────────────────────────────────
+  - type: custom:button-card
+    name: "Eletrodomésticos"
+    show_icon: false
+    styles:
+      card:
+        - background: "transparent"
+        - box-shadow: "none"
+        - padding: "12px 4px 4px"
+      name:
+        - font-size: "13px"
+        - font-weight: "700"
+        - color: "#2E2742"
+        - text-align: "left"
+
+  # ── Grid de Eletrodomésticos (2 colunas) ────────────────────────────────
+  - type: grid
+    columns: 2
+    square: false
+    cards:
+
+      # Geladeira
+      - type: custom:button-card
+        entity: switch.geladeira
+        name: "Geladeira"
+        label: "[[[ return entity.state === 'on' ? '4 °C · Eco' : 'Em espera' ]]]"
+        show_label: true
+        icon: mdi:fridge-outline
+        tap_action:
+          action: more-info
+        styles:
+          card:
+            - background: "[[[ return entity.state === 'on' ? '#FFFFFF' : '#FBF6EC' ]]]"
+            - border-radius: "20px"
+            - padding: "12px"
+            - box-shadow: "0 4px 12px rgba(46,39,66,0.06)"
+            - min-height: "108px"
+          icon:
+            - color: "[[[ return entity.state === 'on' ? '#9E8AC4' : '#7A7388' ]]]"
+            - width: "16px"
+            - padding: "8px"
+            - border-radius: "50%"
+            - background: "[[[ return entity.state === 'on' ? '#D2C5E6' : 'rgba(46,39,66,0.06)' ]]]"
+          name:
+            - font-size: "13px"
+            - font-weight: "700"
+            - color: "#2E2742"
+            - text-align: "left"
+            - margin-top: "12px"
+          label:
+            - font-size: "10px"
+            - color: "#7A7388"
+            - text-align: "left"
+
+      # Microondas
+      - type: custom:button-card
+        entity: switch.microondas
+        name: "Microondas"
+        label: "[[[ return entity.state === 'on' ? '01:30 restante' : 'Em espera' ]]]"
+        show_label: true
+        icon: mdi:microwave
+        tap_action:
+          action: toggle
+        styles:
+          card:
+            - background: "[[[ return entity.state === 'on' ? '#FFFFFF' : '#FBF6EC' ]]]"
+            - border-radius: "20px"
+            - padding: "12px"
+            - box-shadow: "0 4px 12px rgba(46,39,66,0.06)"
+            - min-height: "108px"
+          icon:
+            - color: "[[[ return entity.state === 'on' ? '#E5B7AC' : '#7A7388' ]]]"
+            - width: "16px"
+            - padding: "8px"
+            - border-radius: "50%"
+            - background: "[[[ return entity.state === 'on' ? '#F1DCD4' : 'rgba(46,39,66,0.06)' ]]]"
+          name:
+            - font-size: "13px"
+            - font-weight: "700"
+            - color: "#2E2742"
+            - text-align: "left"
+            - margin-top: "12px"
+          label:
+            - font-size: "10px"
+            - color: "#7A7388"
+            - text-align: "left"
+
+      # Cafeteira
+      - type: custom:button-card
+        entity: switch.cafeteira
+        name: "Cafeteira"
+        label: "[[[ return entity.state === 'on' ? 'Coando · 70°' : 'Em espera' ]]]"
+        show_label: true
+        icon: mdi:coffee-maker
+        tap_action:
+          action: toggle
+        styles:
+          card:
+            - background: "[[[ return entity.state === 'on' ? '#FFFFFF' : '#FBF6EC' ]]]"
+            - border-radius: "20px"
+            - padding: "12px"
+            - box-shadow: "0 4px 12px rgba(46,39,66,0.06)"
+            - min-height: "108px"
+          icon:
+            - color: "[[[ return entity.state === 'on' ? '#E36A2A' : '#7A7388' ]]]"
+            - width: "16px"
+            - padding: "8px"
+            - border-radius: "50%"
+            - background: "[[[ return entity.state === 'on' ? '#F6B584' : 'rgba(46,39,66,0.06)' ]]]"
+          name:
+            - font-size: "13px"
+            - font-weight: "700"
+            - color: "#2E2742"
+            - text-align: "left"
+            - margin-top: "12px"
+          label:
+            - font-size: "10px"
+            - color: "#7A7388"
+            - text-align: "left"
+
+      # AirFryer
+      - type: custom:button-card
+        entity: switch.airfryer
+        name: "AirFryer"
+        label: "[[[ return entity.state === 'on' ? '180° · 12min' : 'Em espera' ]]]"
+        show_label: true
+        icon: mdi:pot-steam-outline
+        tap_action:
+          action: toggle
+        styles:
+          card:
+            - background: "[[[ return entity.state === 'on' ? '#FFFFFF' : '#FBF6EC' ]]]"
+            - border-radius: "20px"
+            - padding: "12px"
+            - box-shadow: "0 4px 12px rgba(46,39,66,0.06)"
+            - min-height: "108px"
+          icon:
+            - color: "[[[ return entity.state === 'on' ? '#E36A2A' : '#7A7388' ]]]"
+            - width: "16px"
+            - padding: "8px"
+            - border-radius: "50%"
+            - background: "[[[ return entity.state === 'on' ? '#F6B584' : 'rgba(46,39,66,0.06)' ]]]"
+          name:
+            - font-size: "13px"
+            - font-weight: "700"
+            - color: "#2E2742"
+            - text-align: "left"
+            - margin-top: "12px"
+          label:
+            - font-size: "10px"
+            - color: "#7A7388"
+            - text-align: "left"
+
+      # Panela de Pressão
+      - type: custom:button-card
+        entity: switch.panela_pressao
+        name: "Panela Pressão"
+        label: "[[[ return entity.state === 'on' ? 'Cozinhando' : 'Em espera' ]]]"
+        show_label: true
+        icon: mdi:pot-outline
+        tap_action:
+          action: toggle
+        styles:
+          card:
+            - background: "[[[ return entity.state === 'on' ? '#FFFFFF' : '#FBF6EC' ]]]"
+            - border-radius: "20px"
+            - padding: "12px"
+            - box-shadow: "0 4px 12px rgba(46,39,66,0.06)"
+            - min-height: "108px"
+          icon:
+            - color: "[[[ return entity.state === 'on' ? '#F08648' : '#7A7388' ]]]"
+            - width: "16px"
+            - padding: "8px"
+            - border-radius: "50%"
+            - background: "[[[ return entity.state === 'on' ? 'rgba(240,134,72,0.2)' : 'rgba(46,39,66,0.06)' ]]]"
+          name:
+            - font-size: "13px"
+            - font-weight: "700"
+            - color: "#2E2742"
+            - text-align: "left"
+            - margin-top: "12px"
+          label:
+            - font-size: "10px"
+            - color: "#7A7388"
+            - text-align: "left"
+
+      # Sanduicheira
+      - type: custom:button-card
+        entity: switch.sanduicheira
+        name: "Sanduicheira"
+        label: "[[[ return entity.state === 'on' ? 'Aquecendo' : 'Em espera' ]]]"
+        show_label: true
+        icon: mdi:toaster-oven
+        tap_action:
+          action: toggle
+        styles:
+          card:
+            - background: "[[[ return entity.state === 'on' ? '#FFFFFF' : '#FBF6EC' ]]]"
+            - border-radius: "20px"
+            - padding: "12px"
+            - box-shadow: "0 4px 12px rgba(46,39,66,0.06)"
+            - min-height: "108px"
+          icon:
+            - color: "[[[ return entity.state === 'on' ? '#E5B7AC' : '#7A7388' ]]]"
+            - width: "16px"
+            - padding: "8px"
+            - border-radius: "50%"
+            - background: "[[[ return entity.state === 'on' ? '#F1DCD4' : 'rgba(46,39,66,0.06)' ]]]"
+          name:
+            - font-size: "13px"
+            - font-weight: "700"
+            - color: "#2E2742"
+            - text-align: "left"
+            - margin-top: "12px"
+          label:
+            - font-size: "10px"
+            - color: "#7A7388"
+            - text-align: "left"
+
+      # Liquidificador
+      - type: custom:button-card
+        entity: switch.liquidificador
+        name: "Liquidificador"
+        label: "[[[ return entity.state === 'on' ? 'Vel 3' : 'Em espera' ]]]"
+        show_label: true
+        icon: mdi:blender-outline
+        tap_action:
+          action: toggle
+        styles:
+          card:
+            - background: "[[[ return entity.state === 'on' ? '#FFFFFF' : '#FBF6EC' ]]]"
+            - border-radius: "20px"
+            - padding: "12px"
+            - box-shadow: "0 4px 12px rgba(46,39,66,0.06)"
+            - min-height: "108px"
+          icon:
+            - color: "[[[ return entity.state === 'on' ? '#7FB892' : '#7A7388' ]]]"
+            - width: "16px"
+            - padding: "8px"
+            - border-radius: "50%"
+            - background: "[[[ return entity.state === 'on' ? '#BFDDC4' : 'rgba(46,39,66,0.06)' ]]]"
+          name:
+            - font-size: "13px"
+            - font-weight: "700"
+            - color: "#2E2742"
+            - text-align: "left"
+            - margin-top: "12px"
+          label:
+            - font-size: "10px"
+            - color: "#7A7388"
+            - text-align: "left"
+
+      # Exaustor / Coifa
+      - type: custom:button-card
+        entity: switch.exaustor_cozinha
+        name: "Exaustor"
+        label: "[[[ return entity.state === 'on' ? 'Vel 2' : 'Desligado' ]]]"
+        show_label: true
+        icon: mdi:fan
+        tap_action:
+          action: toggle
+        styles:
+          card:
+            - background: "[[[ return entity.state === 'on' ? '#FFFFFF' : '#FBF6EC' ]]]"
+            - border-radius: "20px"
+            - padding: "12px"
+            - box-shadow: "0 4px 12px rgba(46,39,66,0.06)"
+            - min-height: "108px"
+          icon:
+            - color: "[[[ return entity.state === 'on' ? '#9E8AC4' : '#7A7388' ]]]"
+            - width: "16px"
+            - padding: "8px"
+            - border-radius: "50%"
+            - background: "[[[ return entity.state === 'on' ? '#D2C5E6' : 'rgba(46,39,66,0.06)' ]]]"
+          name:
+            - font-size: "13px"
+            - font-weight: "700"
+            - color: "#2E2742"
+            - text-align: "left"
+            - margin-top: "12px"
+          label:
+            - font-size: "10px"
+            - color: "#7A7388"
+            - text-align: "left"
+
+  # ── Consumo da Cozinha ──────────────────────────────────────────────────
+  - type: custom:mini-graph-card
+    entities:
+      - entity: sensor.cozinha_energia_total
+        name: "Cozinha"
+        color: "#F08648"
+    name: "Consumo da Cozinha"
+    hours_to_show: 24
+    points_per_hour: 2
+    line_width: 2
+    fill: fade
+    show:
+      state: true
+      labels: false
+      icon: false
+    card_mod:
+      style: |
+        ha-card {
+          background: #FFFFFF !important;
+          border-radius: 26px !important;
+          box-shadow: 0 8px 24px rgba(46,39,66,0.08) !important;
+          padding: 16px;
+        }
