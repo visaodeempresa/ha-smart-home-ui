@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd /Volumes/SSD-T1-01/CLAUDE-SSD/PROJECTS/ha-smart-home-ui && git push origin $(git symbolic-ref --short HEAD 2>/dev/null || echo develop) 2>/dev/null || true",
+            "statusMessage": "🚀 Syncing with GitHub..."
+          }
+        ]
+      }
+    ]
+  }
+}
